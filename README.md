@@ -1,2 +1,3 @@
-"# cse2102-fall24-Team36" 
-Supeng Yu suy20005
+"# cse2102-fall24-Team36" \n
+    Name        netID
+Supeng Yu      suy20005
