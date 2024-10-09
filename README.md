@@ -10,3 +10,6 @@
 
 ## Trello Board
 https://trello.com/b/pvWsZoYV/group-6-scrum-board
+
+## Figma Prototype
+https://www.figma.com/design/CXFVGp0xjA3qPiNXCHrSzu/Pet-Adoption-Website?node-id=15-129&node-type=canvas&t=SZgd1nV5rdbKSWy6-0
