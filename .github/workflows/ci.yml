@@ -3,11 +3,11 @@ name: Python CI Pipeline
 on:
   push:
     branches:
-      - developer
+      - develop
       - main
   pull_request:
     branches:
-      - developer
+      - develop
       - main
   workflow_dispatch:
 
