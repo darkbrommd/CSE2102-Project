@@ -1,3 +1,8 @@
+"""
+This module defines the routes for managing donations in the application.
+It includes endpoints to add a new donation and to retrieve all donations.
+"""
+
 from flask import Blueprint, jsonify, request
 from models import Donation
 from flasgger import swag_from
@@ -23,4 +28,7 @@ def add_donation():
     )
     db.session.add(new_donation)
     db.session.commit()
-    return jsonify({"message": "Donation added successfully", "donation": new_donation.to_dict()}), 201
+    return jsonify({
+        "message": "Donation added successfully",
+        "donation": new_donation.to_dict()
+    }), 201
