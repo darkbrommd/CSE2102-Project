@@ -1,0 +1,21 @@
+      tags:
+        - Adoption
+      summary: Cancel an adoption application
+      parameters:
+        - name: pet_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Adoption application canceled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Adoption application for pet_id 1 has been canceled."

@@ -1,3 +1,5 @@
+"""This module provides search functionality for finding pets based on various criteria."""
+
 from flask import Blueprint, jsonify, request
 from models import Pet
 
@@ -6,8 +8,8 @@ search_bp = Blueprint('search', __name__)
 @search_bp.route('/search', methods=['GET'])
 def search_pets():
     """Search for pets by various criteria in the database"""
-    
-    # retrieve query parameters
+
+    # Retrieve query parameters
     species = request.args.get('species')
     breed = request.args.get('breed')
     age = request.args.get('age')
@@ -16,8 +18,9 @@ def search_pets():
     gender = request.args.get('gender')
     special_needs = request.args.get('special_needs')
     availability = request.args.get('availability')
-    
-    query = Pet.query # build the query dynamically based on filters
+
+    # Build the query dynamically based on filters
+    query = Pet.query
     if species:
         query = query.filter(Pet.species.ilike(f"%{species}%"))
     if breed:
@@ -36,7 +39,7 @@ def search_pets():
     if availability is not None:
         availability_bool = availability.lower() == 'true'
         query = query.filter(Pet.available_for_adoption == availability_bool)
-    
-    # execute the query and return results
+
+    # Execute the query and return results
     pets = query.all()
     return jsonify([pet.to_dict() for pet in pets]), 200

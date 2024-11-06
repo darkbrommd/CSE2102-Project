@@ -1,0 +1,83 @@
+tags:
+  - Pets
+summary: Add a new pet to the database
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Buddy"
+        species:
+          type: string
+          example: "Dog"
+        breed:
+          type: string
+          example: "Labrador"
+        age:
+          type: integer
+          example: 3
+        size:
+          type: string
+          example: "Medium"
+        location:
+          type: string
+          example: "New York"
+        gender:
+          type: string
+          example: "Male"
+        special_needs:
+          type: boolean
+          example: false
+        available_for_adoption:
+          type: boolean
+          example: true
+responses:
+  201:
+    description: Pet added successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Pet added successfully"
+        pet:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: "Buddy"
+            species:
+              type: string
+              example: "Dog"
+            breed:
+              type: string
+              example: "Labrador"
+            age:
+              type: integer
+              example: 3
+            size:
+              type: string
+              example: "Medium"
+            location:
+              type: string
+              example: "New York"
+            gender:
+              type: string
+              example: "Male"
+            special_needs:
+              type: boolean
+              example: false
+            available_for_adoption:
+              type: boolean
+              example: true
+            date_added:
+              type: string
+              format: date-time
+              example: "2024-11-05T22:31:22.000Z"

@@ -1,0 +1,27 @@
+tags:
+  - Adoption
+summary: Apply for adoption of a pet
+parameters:
+  - name: pet_id
+    in: path
+    required: true
+    type: integer
+    example: 1
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 2
+responses:
+  201:
+    description: Adoption application submitted successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Adoption application submitted successfully for Buddy."

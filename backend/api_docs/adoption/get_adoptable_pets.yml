@@ -1,0 +1,31 @@
+      tags:
+        - Adoption
+      summary: Get a list of pets available for adoption
+      responses:
+        200:
+          description: A list of adoptable pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: "Buddy"
+                    species:
+                      type: string
+                      example: "Dog"
+                    breed:
+                      type: string
+                      example: "Labrador"
+                    age:
+                      type: integer
+                      example: 3
+                    available_for_adoption:
+                      type: boolean
+                      example: true

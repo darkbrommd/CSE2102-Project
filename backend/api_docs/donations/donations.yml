@@ -1,0 +1,26 @@
+tags:
+  - Donation
+summary: Retrieve all donations from the database
+parameters: []
+responses:
+  200:
+    description: List of all donations retrieved successfully
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          user:
+            type: string
+            example: "newuser"
+          amount:
+            type: number
+            format: float
+            example: 50.0
+          date:
+            type: string
+            format: date-time
+            example: "2024-11-05T22:31:22.000Z"

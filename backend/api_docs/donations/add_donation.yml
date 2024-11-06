@@ -1,0 +1,43 @@
+tags:
+  - Donation
+summary: Add a new donation to the database
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        user:
+          type: string
+          example: "newuser"
+        amount:
+          type: number
+          format: float
+          example: 50.0
+responses:
+  201:
+    description: Donation added successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Donation added successfully"
+        donation:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            user:
+              type: string
+              example: "newuser"
+            amount:
+              type: number
+              format: float
+              example: 50.0
+            date:
+              type: string
+              format: date-time
+              example: "2024-11-05T22:31:22.000Z"
