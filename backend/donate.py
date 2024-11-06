@@ -1,5 +1,6 @@
 # Import necessary modules from Flask
 from flask import Flask, request, jsonify
+from werkzeug.exceptions import BadRequest
 
 # Initialize a Flask application
 app = Flask(__name__)
@@ -10,17 +11,33 @@ donations = []
 # Define a route to handle donation submissions
 @app.route('/donate', methods=['POST'])
 def donate():
-    # Parse JSON data from the request body
-    data = request.get_json()
+    try:
+        # Parse JSON data from the request body
+        data = request.get_json()
+    except BadRequest:
+        # Handle malformed JSON
+        return jsonify({"error": "Invalid JSON."}), 400
+
+    # Check if JSON was parsed successfully
+    if not data:
+        return jsonify({"error": "No JSON data provided."}), 400
 
     # Validate the presence of 'user' and 'amount' in the received data
-    if not data or 'user' not in data or 'amount' not in data:
-        # If validation fails, return an error message and a 400 status code
-        return jsonify({"error": "Invalid input. 'user' and 'amount' are required."}), 400
+    if 'user' not in data:
+        return jsonify({"error": "Invalid input. 'user' is required."}), 400
+
+    if 'amount' not in data:
+        return jsonify({"error": "Invalid input. 'amount' is required."}), 400
 
     # Extract 'user' and 'amount' from the parsed JSON data
     user = data['user']
     amount = data['amount']
+
+    # Validate value constraints
+    if not user.strip():
+        return jsonify({"error": "'user' cannot be empty."}), 400
+    if amount <= 0:
+        return jsonify({"error": "'amount' must be greater than zero."}), 400
 
     # Create a donation dictionary with 'user' and 'amount'
     donation = {'user': user, 'amount': amount}
@@ -36,7 +53,13 @@ def get_donations():
     # Return the list of donations as JSON with a 200 status code
     return jsonify(donations), 200
 
+# Global error handler for BadRequest exceptions (e.g., invalid JSON)
+@app.errorhandler(BadRequest)
+def handle_bad_request(e):
+    return jsonify({"error": "Invalid JSON."}), 400
+
 # Run the Flask app only if this script is executed directly
 if __name__ == '__main__':
     # Enable debug mode for easier troubleshooting and run the app on the default port (5000)
     app.run(debug=True)
+
