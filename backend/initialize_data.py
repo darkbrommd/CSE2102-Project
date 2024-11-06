@@ -1,10 +1,17 @@
+"""
+This script initializes the database with sample data for testing purposes.
+"""
+
 from datetime import datetime
-from werkzeug.security import generate_password_hash
 from db import db
 from models import User, Pet, Donation, Adoption
 from main import app
 
 def initialize_data():
+    """
+    Initializes the database with sample data for users, pets, donations, and adoptions.
+    This function drops existing tables, recreates them, and populates them with sample records.
+    """
     with app.app_context():
         # Drop all tables and recreate them (optional, useful for testing)
         db.drop_all()

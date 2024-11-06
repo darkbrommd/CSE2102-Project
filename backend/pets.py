@@ -1,3 +1,5 @@
+"""Routes and functions for managing pet information."""
+
 import os
 from flask import Blueprint, jsonify, request, current_app
 from models import Pet
@@ -10,13 +12,13 @@ pets_bp = Blueprint('pets', __name__)
 # Function to check file extension
 def allowed_file(filename):
     """Check if the file has an allowed extension."""
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 @pets_bp.route('/pets', methods=['GET'])
 @swag_from('api_docs/pets/get_all_pets.yml')
 def get_all_pets():
-    """Fetch all pets from the database"""
+    """Fetch all pets from the database."""
     pets = Pet.query.all()
     return jsonify([pet.to_dict() for pet in pets]), 200
 
@@ -24,7 +26,7 @@ def get_all_pets():
 @pets_bp.route('/add_pet', methods=['POST'])
 @swag_from('api_docs/pets/pets.yml')
 def add_pet():
-    """Add a new pet to the database"""
+    """Add a new pet to the database."""
     data = request.get_json()
 
     # Ensure data was received
@@ -55,7 +57,7 @@ def add_pet():
 
 @pets_bp.route('/pets/<int:pet_id>', methods=['GET'])
 def get_pet_by_id(pet_id):
-    """Fetch pet details by ID from the database"""
+    """Fetch pet details by ID from the database."""
     pet = Pet.query.get(pet_id)
     if pet:
         return jsonify(pet.to_dict()), 200
@@ -64,7 +66,7 @@ def get_pet_by_id(pet_id):
 @pets_bp.route('/update_pet/<int:pet_id>', methods=['PUT'])
 @swag_from('api_docs/pets/update_pet.yml')
 def update_pet(pet_id):
-    """Update pet details by ID, including an optional photo update"""
+    """Update pet details by ID, including an optional photo update."""
     pet = Pet.query.get(pet_id)
     if not pet:
         return jsonify({"error": "Pet not found"}), 404
@@ -91,7 +93,10 @@ def update_pet(pet_id):
     pet.location = data.get('location', pet.location)
     pet.gender = data.get('gender', pet.gender)
     pet.special_needs = data.get('special_needs', str(pet.special_needs)).lower() == 'true'
-    pet.available_for_adoption = data.get('available_for_adoption', str(pet.available_for_adoption)).lower() == 'true'
+    pet.available_for_adoption = (
+        data.get('available_for_adoption', str(pet.available_for_adoption))
+        .lower() == 'true'
+    )
     pet.photo = photo_path
 
     db.session.commit()
@@ -100,7 +105,7 @@ def update_pet(pet_id):
 @pets_bp.route('/delete_pet/<int:pet_id>', methods=['DELETE'])
 @swag_from('api_docs/pets/delete_pet.yml')
 def delete_pet(pet_id):
-    """Delete a pet by ID provided as a path parameter"""
+    """Delete a pet by ID provided as a path parameter."""
     pet = Pet.query.get(pet_id)
     if not pet:
         return jsonify({"error": "Pet not found"}), 404

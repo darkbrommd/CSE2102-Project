@@ -1,10 +1,18 @@
+"""
+This module defines the database models for User, Pet, Donation, and Adoption.
+These models represent the core entities in the application, such as users,
+pets available for adoption, donations made by users, and adoption records.
+"""
+
 from datetime import datetime
 from db import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
+    """Represents a user in the system."""
+
     __tablename__ = 'users'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -13,12 +21,15 @@ class User(db.Model):
     profile_picture = db.Column(db.String(200), nullable=True)
 
     def set_password(self, password):
+        """Hashes the password and stores it."""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        """Verifies the password against the stored hash."""
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
+        """Converts the User object to a dictionary."""
         return {
             "id": self.id,
             "username": self.username,
@@ -28,8 +39,10 @@ class User(db.Model):
         }
 
 class Pet(db.Model):
+    """Represents a pet available for adoption."""
+
     __tablename__ = 'pets'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     species = db.Column(db.String(50), nullable=False)
@@ -44,6 +57,7 @@ class Pet(db.Model):
     photo = db.Column(db.String(200), nullable=True)
 
     def to_dict(self):
+        """Converts the Pet object to a dictionary."""
         return {
             "id": self.id,
             "name": self.name,
@@ -60,14 +74,17 @@ class Pet(db.Model):
         }
 
 class Donation(db.Model):
+    """Represents a donation made by a user."""
+
     __tablename__ = 'donations'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
+        """Converts the Donation object to a dictionary."""
         return {
             "id": self.id,
             "user": self.user,
@@ -76,14 +93,17 @@ class Donation(db.Model):
         }
 
 class Adoption(db.Model):
+    """Represents an adoption record linking a user and a pet."""
+
     __tablename__ = 'adoptions'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date_adopted = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
+        """Converts the Adoption object to a dictionary."""
         return {
             "id": self.id,
             "pet_id": self.pet_id,

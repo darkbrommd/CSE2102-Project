@@ -1,4 +1,5 @@
-# user.py
+"""User-related API endpoints for registration, login, profile management, and deletion."""
+
 import os
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
@@ -10,15 +11,15 @@ user_bp = Blueprint('user', __name__)
 
 def allowed_file(filename):
     """Check if the file has an allowed extension."""
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 @user_bp.route('/signup', methods=['POST'])
 @swag_from('api_docs/user/signup.yml')
 def signup():
     """User registration endpoint"""
     data = request.get_json()  # Get JSON data from the request
-    
+
     # Extract fields from the request
     username = data.get('username')
     password = data.get('password')
@@ -62,12 +63,12 @@ def login():
 def change_profile():
     """User profile update endpoint"""
     data = request.get_json()
-    
+
     # Authenticate the user
     username = data.get('username')
     password = data.get('password')
     user = User.query.filter_by(username=username).first()
-    
+
     if not user or not user.check_password(password):
         return jsonify({'error': 'Invalid credentials'}), 401
 
@@ -88,7 +89,8 @@ def change_profile():
         file = request.files['profile_picture']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            profile_picture_path = os.path.join(current_app.config['PROFILE_UPLOAD_FOLDER'], filename)
+            profile_folder = current_app.config['PROFILE_UPLOAD_FOLDER']
+            profile_picture_path = os.path.join(profile_folder, filename)
             file.save(profile_picture_path)  # Save file to server
             user.profile_picture = profile_picture_path
         else:
@@ -116,7 +118,7 @@ def forgot_password():
 def delete_user():
     """Delete a user by ID from query parameter"""
     user_id = request.args.get('user_id', type=int)
-    
+
     if user_id is None:
         return jsonify({"error": "User ID not provided"}), 400
 
@@ -125,5 +127,4 @@ def delete_user():
         db.session.delete(user)
         db.session.commit()
         return jsonify({"message": "User deleted successfully"}), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
+    return jsonify({"error": "User not found"}), 404
