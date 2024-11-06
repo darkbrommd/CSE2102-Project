@@ -9,6 +9,7 @@ on:
     branches:
       - developer
       - main
+  workflow_dispatch:
 
 jobs:
   python_ci:
