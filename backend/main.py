@@ -10,7 +10,7 @@ from db import db
 from user import user_bp
 from pets import pets_bp
 from adopt import adopt_bp
-from donation import donation_bp
+from donate import donation_bp
 
 app = Flask(__name__, static_url_path='/public', static_folder='public')
 swagger = Swagger(app)
