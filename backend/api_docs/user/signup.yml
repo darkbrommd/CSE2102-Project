@@ -1,0 +1,46 @@
+tags:
+  - User
+summary: Register a new user
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "newuser"
+        email:
+          type: string
+          example: "newuser@example.com"
+        password:
+          type: string
+          example: "newpassword"
+        zip_code:
+          type: string
+          example: "12345"
+responses:
+  201:
+    description: User registered successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User registered successfully"
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            username:
+              type: string
+              example: "newuser"
+            email:
+              type: string
+              example: "newuser@example.com"
+            zip_code:
+              type: string
+              example: "12345"

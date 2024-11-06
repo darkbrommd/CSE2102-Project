@@ -1,32 +1,47 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from flasgger import Swagger
+from db import db
 from user import user_bp
+from pets import pets_bp
+from adopt import adopt_bp
+from donation import donation_bp
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pets.db'
+app = Flask(__name__, static_url_path='/public', static_folder='public')
+swagger = Swagger(app)
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+# Initialize the database
+db.init_app(app)
 
+# Enable CORS
 CORS(app)
 
-# Configure maximum file upload size (e.g., 16 MB)
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+# File upload configuration
+app.config['PROFILE_UPLOAD_FOLDER'] = 'public/profile_pictures'  # Folder for user profile pictures
+app.config['PET_UPLOAD_FOLDER'] = 'public/pet_photos'            # Folder for pet photos
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024              # Set max upload size to 16 MB
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # Allowed extensions
 
-# Allowed file extensions for profile pictures
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
-
+# Function to check file extension
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-
-# Register the user blueprint
+# Register the blueprints
 app.register_blueprint(user_bp)
+app.register_blueprint(pets_bp)
+app.register_blueprint(adopt_bp)
+app.register_blueprint(donation_bp)
+
+
+# Error handling for file size limit
+@app.errorhandler(413)
+def file_too_large(error):
+    return jsonify({"error": "File is too large. Max upload size is 16 MB."}), 413
 
 if __name__ == "__main__":
-    # Create database tables if they don't exist
     with app.app_context():
         db.create_all()
 
