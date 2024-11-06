@@ -103,7 +103,7 @@ class Adoption(db.Model):
     date_adopted = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
-        """Converts the Adoption object to a dictionary."""
+        """Convertss the Adoption object to a dictionary."""
         return {
             "id": self.id,
             "pet_id": self.pet_id,
