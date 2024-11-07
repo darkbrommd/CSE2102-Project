@@ -1,11 +1,13 @@
 """This module provides search functionality for finding pets based on various criteria."""
 
 from flask import Blueprint, jsonify, request
+from flasgger import swag_from
 from models import Pet
 
 search_bp = Blueprint('search', __name__)
 
 @search_bp.route('/search', methods=['GET'])
+@swag_from('api_docs/search/search_pets.yml')
 def search_pets():
     """Search for pets by various criteria in the database"""
 

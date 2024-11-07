@@ -1,0 +1,85 @@
+      tags:
+        - Schedule
+      summary: Update an existing meeting
+      parameters:
+        - name: meeting_id
+          in: path
+          required: true
+          type: string
+          example: "b5d0f900-6b2b-4f0a-bf07-ef1c93e6741a"
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 123
+              facility_id:
+                type: string
+                example: "facility-001"
+              pet_id:
+                type: integer
+                example: 456
+              date_time:
+                type: string
+                format: date-time
+                example: "2024-11-06 15:00:00"
+              duration:
+                type: integer
+                example: 90
+      responses:
+        200:
+          description: Meeting updated successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Meeting updated successfully."
+              meeting:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "b5d0f900-6b2b-4f0a-bf07-ef1c93e6741a"
+                  user_id:
+                    type: integer
+                    example: 123
+                  facility_id:
+                    type: string
+                    example: "facility-001"
+                  pet_id:
+                    type: integer
+                    example: 456
+                  date_time:
+                    type: string
+                    format: date-time
+                    example: "2024-11-06 15:00:00"
+                  duration:
+                    type: integer
+                    example: 90
+        400:
+          description: Invalid input
+          schema:
+            type: object
+            properties:
+              errors:
+                type: object
+        404:
+          description: Meeting not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Meeting not found."
+        409:
+          description: Time conflict with existing meetings
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "The facility is already booked during this time."
