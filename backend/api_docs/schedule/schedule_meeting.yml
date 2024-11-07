@@ -1,0 +1,72 @@
+      tags:
+        - Schedule
+      summary: Schedule a new meeting
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+                example: 123
+              facility_id:
+                type: string
+                example: "facility-001"
+              pet_id:
+                type: integer
+                example: 456
+              date_time:
+                type: string
+                format: date-time
+                example: "2024-11-05 14:30:00"
+              duration:
+                type: integer
+                example: 60
+      responses:
+        201:
+          description: Meeting scheduled successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Meeting scheduled successfully."
+              meeting:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "b5d0f900-6b2b-4f0a-bf07-ef1c93e6741a"
+                  user_id:
+                    type: integer
+                    example: 123
+                  facility_id:
+                    type: string
+                    example: "facility-001"
+                  pet_id:
+                    type: integer
+                    example: 456
+                  date_time:
+                    type: string
+                    format: date-time
+                    example: "2024-11-05 14:30:00"
+                  duration:
+                    type: integer
+                    example: 60
+        400:
+          description: Invalid input
+          schema:
+            type: object
+            properties:
+              errors:
+                type: object
+        409:
+          description: Time conflict with existing meetings
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "The facility is already booked during this time."

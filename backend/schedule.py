@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import BadRequest
 import uuid
 from datetime import datetime, timedelta
+from flasgger import swag_from
 
 from models import Meeting
 from db import db
@@ -74,6 +75,7 @@ def has_time_conflict(new_meeting, exclude_meeting_id=None):
     return False
 
 @schedule_bp.route('/schedule', methods=['POST'])
+@swag_from('api_docs/schedule/schedule_meeting.yml')
 def schedule_meeting():
     try:
         data = request.get_json(force=True)
@@ -102,11 +104,13 @@ def schedule_meeting():
     return jsonify({"message": "Meeting scheduled successfully.", "meeting": new_meeting.to_dict()}), 201
 
 @schedule_bp.route('/schedule', methods=['GET'])
+@swag_from('api_docs/schedule/get_scheduled_meetings.yml')
 def get_meetings():
     meetings = Meeting.query.all()
     return jsonify([meeting.to_dict() for meeting in meetings]), 200
 
 @schedule_bp.route('/schedule/<meeting_id>', methods=['GET'])
+@swag_from('api_docs/schedule/get_meetings_id.yml')
 def get_meeting(meeting_id):
     meeting = Meeting.query.get(meeting_id)
     if not meeting:
@@ -114,6 +118,7 @@ def get_meeting(meeting_id):
     return jsonify(meeting.to_dict()), 200
 
 @schedule_bp.route('/schedule/<meeting_id>', methods=['PUT'])
+@swag_from('api_docs/schedule/update_meeting.yml')
 def update_meeting(meeting_id):
     meeting = Meeting.query.get(meeting_id)
     if not meeting:
@@ -152,6 +157,7 @@ def update_meeting(meeting_id):
     return jsonify({"message": "Meeting updated successfully.", "meeting": meeting.to_dict()}), 200
 
 @schedule_bp.route('/schedule/<meeting_id>', methods=['DELETE'])
+@swag_from('api_docs/schedule/delete_meeting.yml')
 def delete_meeting(meeting_id):
     meeting = Meeting.query.get(meeting_id)
     if not meeting:
