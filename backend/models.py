@@ -1,5 +1,5 @@
 """
-This module defines the database models for User, Pet, Donation, and Adoption.
+This module defines the database models for User, Pet, Donation, Schedule and Adoption.
 These models represent the core entities in the application, such as users,
 pets available for adoption, donations made by users, and adoption records.
 """
@@ -109,4 +109,26 @@ class Adoption(db.Model):
             "pet_id": self.pet_id,
             "user_id": self.user_id,
             "date_adopted": self.date_adopted
+        }
+
+class Meeting(db.Model):
+    """Represents a scheduled meeting in the system."""
+
+    __tablename__ = 'meetings'
+
+    id = db.Column(db.String(36), primary_key=True)  # UUID as a string
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    facility_id = db.Column(db.String(100), nullable=False)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+    date_time = db.Column(db.DateTime, nullable=False)
+    duration = db.Column(db.Integer, nullable=False)  # duration in minutes
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'facility_id': self.facility_id,
+            'pet_id': self.pet_id,
+            'date_time': self.date_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'duration': self.duration
         }
