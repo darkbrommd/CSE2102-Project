@@ -11,6 +11,7 @@ from user import user_bp
 from pets import pets_bp
 from adopt import adopt_bp
 from donate import donation_bp
+from schedule import schedule_bp
 
 app = Flask(__name__, static_url_path='/public', static_folder='public')
 swagger = Swagger(app)
@@ -50,6 +51,7 @@ app.register_blueprint(user_bp)
 app.register_blueprint(pets_bp)
 app.register_blueprint(adopt_bp)
 app.register_blueprint(donation_bp)
+app.register_blueprint(schedule_bp)
 
 @app.errorhandler(413)
 def file_too_large(_error):
