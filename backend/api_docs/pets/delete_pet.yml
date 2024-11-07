@@ -1,0 +1,27 @@
+tags:
+  - Pets
+summary: Delete a pet by ID
+parameters:
+  - name: pet_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      example: 1
+responses:
+  200:
+    description: Pet deleted successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Pet deleted successfully"
+  404:
+    description: Pet not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Pet not found"

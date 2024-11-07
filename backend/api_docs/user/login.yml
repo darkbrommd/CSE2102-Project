@@ -1,0 +1,33 @@
+tags:
+  - User
+summary: Log in a user
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "newuser"
+        password:
+          type: string
+          example: "newpassword"
+responses:
+  200:
+    description: Login successful
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Login successful"
+  401:
+    description: Invalid credentials
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid credentials"

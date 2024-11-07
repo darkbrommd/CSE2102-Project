@@ -1,0 +1,37 @@
+tags:
+  - Adoption
+summary: Check the adoption status of a specific pet
+parameters:
+  - name: pet_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      example: 1
+responses:
+  200:
+    description: Adoption status retrieved successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            pet_id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: "Buddy"
+            status:
+              type: string
+              example: "Available"
+  404:
+    description: Pet not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Pet not found"
