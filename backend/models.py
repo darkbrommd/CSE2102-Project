@@ -1,134 +1,73 @@
 """
-This module defines the database models for User, Pet, Donation, Schedule and Adoption.
-These models represent the core entities in the application, such as users,
-pets available for adoption, donations made by users, and adoption records.
+Main application entry point.
+Sets up the Flask app, initializes database, and configures API endpoints and error handling.
 """
 
-from datetime import datetime
+from flask import Flask, jsonify
+from flask_cors import CORS
+from flasgger import Swagger
 from db import db
-from werkzeug.security import generate_password_hash, check_password_hash
+from user import user_bp
+from pets import pets_bp
+from adopt import adopt_bp
+from donate import donation_bp
+from schedule import schedule_bp
 
-class User(db.Model):
-    """Represents a user in the system."""
+app = Flask(__name__, static_url_path='/public', static_folder='public')
+swagger = Swagger(app)
 
-    __tablename__ = 'users'
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password_hash = db.Column(db.String(200), nullable=False)
-    zip_code = db.Column(db.String(20), nullable=True)
-    profile_picture = db.Column(db.String(200), nullable=True)
+# Initialize the database
+db.init_app(app)
 
-    def set_password(self, password):
-        """Hashes the password and stores it."""
-        self.password_hash = generate_password_hash(password)
+# Enable CORS
+CORS(app)
 
-    def check_password(self, password):
-        """Verifies the password against the stored hash."""
-        return check_password_hash(self.password_hash, password)
+# File upload configuration
+app.config['PROFILE_UPLOAD_FOLDER'] = 'public/profile_pictures'  # Folder for user profile pictures
+app.config['PET_UPLOAD_FOLDER'] = 'public/pet_photos'            # Folder for pet photos
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024              # Set max upload size to 16 MB
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # Allowed extensions
 
-    def to_dict(self):
-        """Converts the User object to a dictionary."""
-        return {
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            "zip_code": self.zip_code,
-            "profile_picture": self.profile_picture
-        }
+def allowed_file(_filename):
+    """
+    Check if a filename has an allowed extension.
+    
+    Args:
+        filename (str): The name of the file.
+    
+    Returns:
+        bool: True if the file extension is allowed, False otherwise.
+    """
+    return jsonify({
+    "error": "File is too large. Max upload size is 16 MB."
+    }), 413
 
-class Pet(db.Model):
-    """Represents a pet available for adoption."""
+# Register the blueprints
+app.register_blueprint(user_bp)
+app.register_blueprint(pets_bp)
+app.register_blueprint(adopt_bp)
+app.register_blueprint(donation_bp)
+app.register_blueprint(schedule_bp)
 
-    __tablename__ = 'pets'
+@app.errorhandler(413)
+def file_too_large(_error):
+    """
+    Error handler for files that exceed the maximum upload size.
+    
+    Args:
+        _error: The error object (unused).
+    
+    Returns:
+        JSON response with error message and HTTP status 413.
+    """
+    return jsonify({"error": "File is too large. Max upload size is 16 MB."}), 413
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    species = db.Column(db.String(50), nullable=False)
-    breed = db.Column(db.String(50), nullable=True)
-    age = db.Column(db.Integer, nullable=True)
-    size = db.Column(db.String(20), nullable=True)
-    location = db.Column(db.String(100), nullable=True)
-    gender = db.Column(db.String(10), nullable=True)
-    special_needs = db.Column(db.Boolean, default=False)
-    available_for_adoption = db.Column(db.Boolean, default=True)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
-    photo = db.Column(db.String(200), nullable=True)
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()  # Create all database tables
 
-    def to_dict(self):
-        """Converts the Pet object to a dictionary."""
-        return {
-            "id": self.id,
-            "name": self.name,
-            "species": self.species,
-            "breed": self.breed,
-            "age": self.age,
-            "size": self.size,
-            "location": self.location,
-            "gender": self.gender,
-            "special_needs": self.special_needs,
-            "available_for_adoption": self.available_for_adoption,
-            "date_added": self.date_added,
-            "photo": self.photo
-        }
-
-class Donation(db.Model):
-    """Represents a donation made by a user."""
-
-    __tablename__ = 'donations'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.String(100), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def to_dict(self):
-        """Converts the Donation object to a dictionary."""
-        return {
-            "id": self.id,
-            "user": self.user,
-            "amount": self.amount,
-            "date": self.date
-        }
-
-class Adoption(db.Model):
-    """Represents an adoption record linking a user and a pet."""
-
-    __tablename__ = 'adoptions'
-
-    id = db.Column(db.Integer, primary_key=True)
-    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    date_adopted = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def to_dict(self):
-        """Convertss the Adoption object to a dictionary."""
-        return {
-            "id": self.id,
-            "pet_id": self.pet_id,
-            "user_id": self.user_id,
-            "date_adopted": self.date_adopted
-        }
-
-class Meeting(db.Model):
-    """Represents a scheduled meeting in the system."""
-
-    __tablename__ = 'meetings'
-
-    id = db.Column(db.String(36), primary_key=True)  # UUID as a string
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    facility_id = db.Column(db.String(100), nullable=False)
-    pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
-    date_time = db.Column(db.DateTime, nullable=False)
-    duration = db.Column(db.Integer, nullable=False)  # duration in minutes
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'facility_id': self.facility_id,
-            'pet_id': self.pet_id,
-            'date_time': self.date_time.strftime('%Y-%m-%d %H:%M:%S'),
-            'duration': self.duration
-        }
+    app.run(debug=True)  # Run the app in debug mode
