@@ -1,0 +1,26 @@
+      tags:
+        - Schedule
+      summary: Delete a meeting
+      parameters:
+        - name: meeting_id
+          in: path
+          required: true
+          type: string
+          example: "b5d0f900-6b2b-4f0a-bf07-ef1c93e6741a"
+      responses:
+        200:
+          description: Meeting deleted successfully
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Meeting deleted successfully."
+        404:
+          description: Meeting not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Meeting not found."

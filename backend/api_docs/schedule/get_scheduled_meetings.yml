@@ -1,0 +1,30 @@
+      tags:
+        - Schedule
+      summary: Get all scheduled meetings
+      responses:
+        200:
+          description: A list of meetings
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "b5d0f900-6b2b-4f0a-bf07-ef1c93e6741a"
+                user_id:
+                  type: integer
+                  example: 123
+                facility_id:
+                  type: string
+                  example: "facility-001"
+                pet_id:
+                  type: integer
+                  example: 456
+                date_time:
+                  type: string
+                  format: date-time
+                  example: "2024-11-05 14:30:00"
+                duration:
+                  type: integer
+                  example: 60

@@ -1,0 +1,45 @@
+tags:
+  - Pets
+summary: Fetch all pets from the database
+responses:
+  200:
+    description: List of all pets
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: "Buddy"
+          species:
+            type: string
+            example: "Dog"
+          breed:
+            type: string
+            example: "Labrador"
+          age:
+            type: integer
+            example: 3
+          size:
+            type: string
+            example: "Medium"
+          location:
+            type: string
+            example: "New York"
+          gender:
+            type: string
+            example: "Male"
+          special_needs:
+            type: boolean
+            example: false
+          available_for_adoption:
+            type: boolean
+            example: true
+          date_added:
+            type: string
+            format: date-time
+            example: "2024-11-05T22:31:22.000Z"

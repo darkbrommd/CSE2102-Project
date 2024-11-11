@@ -1,42 +1,26 @@
-# Import necessary modules from Flask
-from flask import Flask, request, jsonify
+from flask import Blueprint, jsonify, request
+from models import Donation
+from flasgger import swag_from
+from db import db
 
-# Initialize a Flask application
-app = Flask(__name__)
+donation_bp = Blueprint('donation', __name__)
 
-# In-memory storage for donations (list will store all donations as dictionaries)
-donations = []
+@donation_bp.route('/donations', methods=['GET'])
+@swag_from('api_docs/donations/donations.yml')
+def get_all_donations():
+    """Fetch all donations from the database"""
+    donations = Donation.query.all()
+    return jsonify([donation.to_dict() for donation in donations]), 200
 
-# Define a route to handle donation submissions
-@app.route('/donate', methods=['POST'])
-def donate():
-    # Parse JSON data from the request body
-    data = request.get_json()
-
-    # Validate the presence of 'user' and 'amount' in the received data
-    if not data or 'user' not in data or 'amount' not in data:
-        # If validation fails, return an error message and a 400 status code
-        return jsonify({"error": "Invalid input. 'user' and 'amount' are required."}), 400
-
-    # Extract 'user' and 'amount' from the parsed JSON data
-    user = data['user']
-    amount = data['amount']
-
-    # Create a donation dictionary with 'user' and 'amount'
-    donation = {'user': user, 'amount': amount}
-    # Add the new donation to the in-memory storage (the donations list)
-    donations.append(donation)
-
-    # Return a success response with the created donation and a 201 status code
-    return jsonify({"message": "Donation received", "donation": donation}), 201
-
-# Define an additional route to view all donations (for testing or inspection)
-@app.route('/donations', methods=['GET'])
-def get_donations():
-    # Return the list of donations as JSON with a 200 status code
-    return jsonify(donations), 200
-
-# Run the Flask app only if this script is executed directly
-if __name__ == '__main__':
-    # Enable debug mode for easier troubleshooting and run the app on the default port (5000)
-    app.run(debug=True)
+@donation_bp.route('/add_donation', methods=['POST'])
+@swag_from('api_docs/donations/add_donation.yml')
+def add_donation():
+    """Add a new donation to the database"""
+    data = request.json
+    new_donation = Donation(
+        user=data['user'],
+        amount=data['amount']
+    )
+    db.session.add(new_donation)
+    db.session.commit()
+    return jsonify({"message": "Donation added successfully", "donation": new_donation.to_dict()}), 201
