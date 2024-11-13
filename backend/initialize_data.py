@@ -3,9 +3,9 @@ This script initializes the database with sample data for testing purposes.
 """
 
 from datetime import datetime
-from db import db
-from models import User, Pet, Donation, Adoption
-from main import app
+from backend.db import db
+from backend.models import User, Pet, Donation, Adoption
+from backend.main import app
 
 def initialize_data():
     """

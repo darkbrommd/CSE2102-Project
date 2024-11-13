@@ -2,7 +2,7 @@
 
 from flask import Blueprint, jsonify, request
 from flasgger import swag_from
-from models import Pet
+from backend.models import Pet
 
 search_bp = Blueprint('search', __name__)
 
