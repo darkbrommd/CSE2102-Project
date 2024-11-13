@@ -1,6 +1,6 @@
 # pylint: disable=redefined-outer-name
-import pytest
 import hashlib
+import pytest
 from flask import Flask
 from backend.main import db
 from backend.models import User, Pet
