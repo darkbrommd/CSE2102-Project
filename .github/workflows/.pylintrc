@@ -96,7 +96,7 @@ disable=
     trailing-whitespace,
     unused-import,
     line-too-long,
-    
+    too-many-branches
 
 
 # Enable the message, report, category or checker with the given id(s). You can
