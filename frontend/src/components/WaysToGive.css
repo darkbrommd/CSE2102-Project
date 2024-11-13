@@ -1,0 +1,15 @@
+/* src/components/WaysToGive.css */
+.ways-to-give {
+  background-color: #ADD8E6;
+  text-align: center;
+  padding: 30px;
+}
+
+.ways-to-give h3 {
+  color: white;
+  font-size: 2em;
+}
+
+.ways-to-give p {
+  color: white;
+}

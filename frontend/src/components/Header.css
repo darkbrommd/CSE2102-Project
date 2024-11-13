@@ -1,0 +1,20 @@
+/* src/components/Header.css */
+.header {
+  background-color: #39C5BB; /* Light blue */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px; /* Adds padding on left and right sides of the header */
+}
+
+.logo {
+  color: white;
+  font-size: 1.7em;
+  margin-right: 40px; /* Adds space to the right of 'HuskyAdoption' */
+}
+
+.sign-in {
+  color: white;
+  text-decoration: none;
+  margin-left: 40px; /* Adds space to the left of 'Sign In' */
+}
