@@ -94,7 +94,9 @@ disable=
     missing-function-docstring,
     missing-class-docstring,
     trailing-whitespace,
-    unused-import
+    unused-import,
+    line-too-long,
+    
 
 
 # Enable the message, report, category or checker with the given id(s). You can
