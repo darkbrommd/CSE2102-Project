@@ -1,7 +1,8 @@
-from flask import Blueprint, request, jsonify
-from werkzeug.exceptions import BadRequest
 import uuid
 from datetime import datetime, timedelta
+
+from flask import Blueprint, request, jsonify
+from werkzeug.exceptions import BadRequest
 from flasgger import swag_from
 
 from backend.models import Meeting
