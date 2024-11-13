@@ -5,7 +5,7 @@ on:
     branches:
       - develop
       - main
-      - feature-dylan-fix
+      - feature-dylan
   pull_request:
     branches:
       - develop
