@@ -1,0 +1,23 @@
+/* src/components/Navbar.css */
+.navbar {
+  background-color: #0000FF; /* Blue */
+  padding: 10px;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.navbar a.active {
+  background-color: #1E90FF; /* Dodger blue for active link */
+}
+
+.navbar a.inactive:hover {
+  background-color: #1E90FF; /* Hover effect for inactive links */
+}
