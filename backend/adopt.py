@@ -7,7 +7,7 @@ checking adoption status, and canceling adoptions.
 from flask import Blueprint, jsonify, request
 from backend.models import User, Pet, Adoption
 from flasgger import swag_from
-from db import db
+from backend.db import db
 
 adopt_bp = Blueprint('adopt', __name__)
 

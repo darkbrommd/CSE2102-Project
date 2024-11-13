@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from backend.models import Donation
 from flasgger import swag_from
-from db import db
+from backend.db import db
 
 donation_bp = Blueprint('donation', __name__)
 

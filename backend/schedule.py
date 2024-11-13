@@ -4,8 +4,8 @@ import uuid
 from datetime import datetime, timedelta
 from flasgger import swag_from
 
-from models import Meeting
-from db import db
+from backend.models import Meeting
+from backend.db import db
 
 schedule_bp = Blueprint('schedule', __name__)
 

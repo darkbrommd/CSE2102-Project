@@ -5,7 +5,7 @@ pets available for adoption, donations made by users, and adoption records.
 """
 
 from datetime import datetime
-from db import db
+from backend.db import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):

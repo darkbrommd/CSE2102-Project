@@ -6,7 +6,7 @@ Sets up the Flask app, initializes database, and configures API endpoints and er
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
-from db import db
+from backend.db import db
 from backend.user import user_bp
 from backend.pets import pets_bp
 from backend.adopt import adopt_bp
