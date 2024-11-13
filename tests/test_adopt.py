@@ -1,10 +1,10 @@
 # pylint: disable=redefined-outer-name
 import pytest
+import hashlib
 from flask import Flask
 from backend.main import db
 from backend.models import User, Pet
 from backend.adopt import adopt_bp
-import hashlib
 
 @pytest.fixture
 def client():
