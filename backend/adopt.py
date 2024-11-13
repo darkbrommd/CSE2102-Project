@@ -5,7 +5,7 @@ checking adoption status, and canceling adoptions.
 """
 
 from flask import Blueprint, jsonify, request
-from models import User, Pet, Adoption
+from backend.models import User, Pet, Adoption
 from flasgger import swag_from
 from db import db
 

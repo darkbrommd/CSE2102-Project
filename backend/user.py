@@ -3,7 +3,7 @@
 import os
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
-from models import User
+from backend.models import User
 from flasgger import swag_from
 from db import db
 

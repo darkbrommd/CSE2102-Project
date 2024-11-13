@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from models import Donation
+from backend.models import Donation
 from flasgger import swag_from
 from db import db
 

@@ -2,7 +2,7 @@
 
 import os
 from flask import Blueprint, jsonify, request, current_app
-from models import Pet
+from backend.models import Pet
 from db import db
 from flasgger import swag_from
 from werkzeug.utils import secure_filename
