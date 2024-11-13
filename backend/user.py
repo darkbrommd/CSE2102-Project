@@ -3,8 +3,8 @@
 import os
 from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
-from backend.models import User
 from flasgger import swag_from
+from backend.models import User
 from backend.db import db
 
 user_bp = Blueprint('user', __name__)
