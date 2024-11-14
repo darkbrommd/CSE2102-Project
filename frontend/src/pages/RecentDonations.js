@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header'; // Import the Header component
-import Navbar from '../components/Navbar'; // Import the Navbar component
+import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 import './RecentDonations.css';
 
 function RecentDonations() {
@@ -27,18 +27,10 @@ function RecentDonations() {
     fetchDonations();
   }, []);
 
-  if (loading) {
-    return <p>Loading recent donations...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
     <div>
-      <Header /> {/* Header component for consistent top navigation */}
-      <Navbar /> {/* Navbar component for site-wide navigation */}
+      <Header />
+      <Navbar />
       <div className="recent-donations">
         <h1>Support Our Cause</h1>
         <p className="intro-text">
@@ -56,15 +48,23 @@ function RecentDonations() {
 
         <h2>Recent Donations</h2>
         <div className="donation-entries">
-          {donations.map((donation, index) => (
-            <div className="donation-entry" key={index}>
-              <span className="donor-name">
-                {donation.anonymous ? 'Anonymous' : donation.name}
-              </span>
-              <span className="donation-amount">${donation.amount}</span>
-              <span className="donation-date">{new Date(donation.date).toLocaleDateString()}</span>
-            </div>
-          ))}
+          {loading ? (
+            <p>Loading recent donations...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : donations.length > 0 ? (
+            donations.map((donation, index) => (
+              <div className="donation-entry" key={index}>
+                <span className="donor-name">
+                  {donation.anonymous ? 'Anonymous' : donation.name}
+                </span>
+                <span className="donation-amount">${donation.amount}</span>
+                <span className="donation-date">{new Date(donation.date).toLocaleDateString()}</span>
+              </div>
+            ))
+          ) : (
+            <p>No recent donations to display.</p>
+          )}
         </div>
       </div>
     </div>
