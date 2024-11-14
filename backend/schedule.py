@@ -1,15 +1,14 @@
-from flask import Blueprint, request, jsonify
-from werkzeug.exceptions import BadRequest
 import uuid
 from datetime import datetime, timedelta
+from flask import Blueprint, request, jsonify
+from werkzeug.exceptions import BadRequest
 from flasgger import swag_from
-
-from models import Meeting
-from db import db
+from backend.models import Meeting
+from backend.db import db
 
 schedule_bp = Blueprint('schedule', __name__)
 
-def validate_meeting(data, is_update=False):
+def validate_meeting(data):
     errors = {}
 
     if 'user_id' not in data:
@@ -129,7 +128,7 @@ def update_meeting(meeting_id):
     except BadRequest:
         return jsonify({"error": "Invalid JSON format."}), 400
 
-    validation_errors = validate_meeting(data, is_update=True)
+    validation_errors = validate_meeting(data)
     if validation_errors:
         return jsonify({"errors": validation_errors}), 400
 

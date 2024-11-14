@@ -1,0 +1,18 @@
+/* src/components/Banner.css */
+.banner {
+    background-color: #00BFFF; /* Deep sky blue */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+  }
+  
+  .banner h2 {
+    color: white;
+    font-size: 3em;
+  }
+  
+  .banner img {
+    height: 150px;
+  }
+  

@@ -2,23 +2,27 @@
 Main application entry point.
 Sets up the Flask app, initializes database, and configures API endpoints and error handling.
 """
-
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
-from db import db
-from user import user_bp
-from pets import pets_bp
-from adopt import adopt_bp
-from donate import donation_bp
-from schedule import schedule_bp
-from search import search_bp
+from backend.db import db
+from backend.user import user_bp
+from backend.pets import pets_bp
+from backend.adopt import adopt_bp
+from backend.donate import donation_bp
+from backend.schedule import schedule_bp
+from backend.search import search_bp
+
 
 app = Flask(__name__, static_url_path='/public', static_folder='public')
 swagger = Swagger(app)
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    'sqlite:///' + os.path.join(basedir, 'instance', 'database.db')
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database

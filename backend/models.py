@@ -5,8 +5,8 @@ pets available for adoption, donations made by users, and adoption records.
 """
 
 from datetime import datetime
-from db import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from backend.db import db
 
 class User(db.Model):
     """Represents a user in the system."""
@@ -75,22 +75,55 @@ class Pet(db.Model):
 
 class Donation(db.Model):
     """Represents a donation made by a user."""
-
-    __tablename__ = 'donations'
-
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
+    frequency = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20), nullable=True)
+    card_number = db.Column(db.String(20), nullable=False)
+    expiry = db.Column(db.String(10), nullable=False)
+    cvv = db.Column(db.String(4), nullable=False)
+    billing_address = db.Column(db.String(200), nullable=False)
+    zip_code = db.Column(db.String(10), nullable=False)
+    dedication = db.Column(db.String(200), nullable=True)
+    anonymous = db.Column(db.Boolean, default=False)
+    employer = db.Column(db.String(100), nullable=True)
+    subscribe = db.Column(db.Boolean, default=False)
+    consent = db.Column(db.Boolean, default=False)
+    tax_receipt = db.Column(db.Boolean, default=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
-        """Converts the Donation object to a dictionary."""
+        """Represents a donation made by a user."""
         return {
             "id": self.id,
             "user": self.user,
             "amount": self.amount,
-            "date": self.date
+            "frequency": self.frequency,
+            "email": self.email,
+            "phone": self.phone,
+            "card_number": self.card_number,
+            "expiry": self.expiry,
+            "cvv": self.cvv,
+            "billing_address": self.billing_address,
+            "zip_code": self.zip_code,
+            "dedication": self.dedication,
+            "anonymous": self.anonymous,
+            "employer": self.employer,
+            "subscribe": self.subscribe,
+            "consent": self.consent,
+            "tax_receipt": self.tax_receipt,
+            "date": self.date 
         }
+    def to_brief_dict(self):
+        """this method returns only the fields needed for the recent donations page"""
+        return {
+        "name": self.user,
+        "amount": self.amount,
+        "date": self.date,
+        "anonymous": self.anonymous
+    }
 
 class Adoption(db.Model):
     """Represents an adoption record linking a user and a pet."""
@@ -124,6 +157,7 @@ class Meeting(db.Model):
     duration = db.Column(db.Integer, nullable=False)  # duration in minutes
 
     def to_dict(self):
+        """Convert the Donation object to a dictionary."""
         return {
             'id': self.id,
             'user_id': self.user_id,

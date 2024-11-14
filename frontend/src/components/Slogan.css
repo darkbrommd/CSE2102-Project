@@ -1,0 +1,16 @@
+/* src/components/Slogan.css */
+.slogan {
+    background-color: #ADD8E6;
+    text-align: center;
+    padding: 30px;
+  }
+  
+  .slogan h3 {
+    color: white;
+    font-size: 2em;
+  }
+  
+  .slogan p {
+    color: white;
+  }
+  

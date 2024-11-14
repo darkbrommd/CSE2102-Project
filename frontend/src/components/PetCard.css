@@ -1,0 +1,32 @@
+/* src/components/PetCard.css */
+.pet-card {
+  text-align: center;
+  margin: 0 15px;
+  width: 200px; /* Adjust width as needed */
+}
+
+.pet-card img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pet-card h4 {
+  margin: 10px 0;
+  color: #0000FF;
+}
+
+.pet-card button {
+  background-color: #0000FF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pet-card button:hover {
+  background-color: #1E90FF;
+}
