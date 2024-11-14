@@ -13,12 +13,14 @@ from backend.adopt import adopt_bp
 from backend.donate import donation_bp
 from backend.schedule import schedule_bp
 from backend.search import search_bp
+import os
 
 app = Flask(__name__, static_url_path='/public', static_folder='public')
 swagger = Swagger(app)
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'instance', 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database
