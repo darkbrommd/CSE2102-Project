@@ -1,12 +1,12 @@
-// src/pages/Donate.js
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import WaysToGive from '../components/WaysToGive';
-import './Donate.css'; // Create a CSS file for styling
+import ThankYouPage from '../pages/ThankYouPage';
+import './Donate.css';
+import axios from 'axios';
 
 function Donate() {
-  // State variables for form inputs
   const [donationAmount, setDonationAmount] = useState('');
   const [frequency, setFrequency] = useState('one-time');
   const [name, setName] = useState('');
@@ -24,10 +24,15 @@ function Donate() {
   const [consent, setConsent] = useState(false);
   const [taxReceipt, setTaxReceipt] = useState(false);
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [donationSuccess, setDonationSuccess] = useState(false);
+  const [donationDetails, setDonationDetails] = useState(null);
+
+  const feedbackRef = useRef(null);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can prepare the data to send to the backend
+
     const donationData = {
       donationAmount,
       frequency,
@@ -45,13 +50,43 @@ function Donate() {
       subscribe,
       consent,
       taxReceipt,
+      date: new Date().toISOString()
     };
 
-    // For now, we'll just log the data
-    console.log('Donation Data:', donationData);
-
-    // TODO: Connect to backend API to process the donation
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/add_donation', donationData);
+      setDonationSuccess(true);
+      setDonationDetails(donationData);
+      resetForm();
+    } catch (error) {
+      setFeedbackMessage({ type: 'error', text: 'Failed to process your donation. Please try again.' });
+      console.error('Error submitting donation:', error);
+      if (feedbackRef.current) feedbackRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
+
+  const resetForm = () => {
+    setDonationAmount('');
+    setFrequency('one-time');
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCardNumber('');
+    setExpiry('');
+    setCvv('');
+    setBillingAddress('');
+    setZipCode('');
+    setDedication('');
+    setAnonymous(false);
+    setEmployer('');
+    setSubscribe(false);
+    setConsent(false);
+    setTaxReceipt(false);
+  };
+
+  if (donationSuccess) {
+    return <ThankYouPage donationDetails={donationDetails} />;
+  }
 
   return (
     <div>
@@ -59,27 +94,25 @@ function Donate() {
       <Navbar />
       <WaysToGive />
       <div className="donate-page">
-        <h2>
-          We accept a wide range of payment methods, including Visa, Mastercard, and American Express.
-        </h2>
+        <h2>We accept a wide range of payment methods, including Visa, Mastercard, and American Express.</h2>
         <p>Below is the form to support our work:</p>
+
+        {/* Display success or error message */}
+        {feedbackMessage && (
+          <p ref={feedbackRef} className={`feedback-message ${feedbackMessage.type}`}>
+            {feedbackMessage.text}
+          </p>
+        )}
+
         <form className="donation-form" onSubmit={handleSubmit}>
           {/* Donation Amount */}
           <div className="form-section">
             <h3>Donation Amount</h3>
             <div className="preset-amounts">
-              <button type="button" onClick={() => setDonationAmount(10)}>
-                $10
-              </button>
-              <button type="button" onClick={() => setDonationAmount(25)}>
-                $25
-              </button>
-              <button type="button" onClick={() => setDonationAmount(50)}>
-                $50
-              </button>
-              <button type="button" onClick={() => setDonationAmount(100)}>
-                $100
-              </button>
+              <button type="button" onClick={() => setDonationAmount(10)}>$10</button>
+              <button type="button" onClick={() => setDonationAmount(25)}>$25</button>
+              <button type="button" onClick={() => setDonationAmount(50)}>$50</button>
+              <button type="button" onClick={() => setDonationAmount(100)}>$100</button>
             </div>
             <label>
               Custom Amount:
@@ -198,9 +231,6 @@ function Donate() {
                 required
               />
             </label>
-            <p className="security-message">
-              Your payment information is secure and encrypted.
-            </p>
           </div>
 
           {/* Additional Options */}
@@ -267,9 +297,7 @@ function Donate() {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="submit-button">
-            Donate Now
-          </button>
+          <button type="submit" className="submit-button">Donate Now</button>
         </form>
       </div>
     </div>
