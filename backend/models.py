@@ -74,6 +74,7 @@ class Pet(db.Model):
         }
 
 class Donation(db.Model):
+    """Represents a donation made by a user."""
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
@@ -92,9 +93,9 @@ class Donation(db.Model):
     consent = db.Column(db.Boolean, default=False)
     tax_receipt = db.Column(db.Boolean, default=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    
 
     def to_dict(self):
+        """Represents a donation made by a user."""
         return {
             "id": self.id,
             "user": self.user,
@@ -116,7 +117,7 @@ class Donation(db.Model):
             "date": self.date 
         }
     def to_brief_dict(self):
-    # This method returns only the fields needed for the recent donations page
+        """this method returns only the fields needed for the recent donations page"""
         return {
         "name": self.user,
         "amount": self.amount,
@@ -156,6 +157,7 @@ class Meeting(db.Model):
     duration = db.Column(db.Integer, nullable=False)  # duration in minutes
 
     def to_dict(self):
+        """Convert the Donation object to a dictionary."""
         return {
             'id': self.id,
             'user_id': self.user_id,
