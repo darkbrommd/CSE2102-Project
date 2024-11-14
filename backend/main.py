@@ -2,7 +2,7 @@
 Main application entry point.
 Sets up the Flask app, initializes database, and configures API endpoints and error handling.
 """
-
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
@@ -13,7 +13,7 @@ from backend.adopt import adopt_bp
 from backend.donate import donation_bp
 from backend.schedule import schedule_bp
 from backend.search import search_bp
-import os
+
 
 app = Flask(__name__, static_url_path='/public', static_folder='public')
 swagger = Swagger(app)
