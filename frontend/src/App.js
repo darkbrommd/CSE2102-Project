@@ -7,6 +7,7 @@ import Donate from './pages/Donate';
 import RecentDonations from './pages/RecentDonations';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Contact from './pages/Contact';
 // Import other pages as needed
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/Donation" element={<Donate />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/contact" element={<Contact />} />
         {/* Add other routes as needed */}
       </Routes>
     </Router>
