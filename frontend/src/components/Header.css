@@ -1,4 +1,5 @@
 /* src/components/Header.css */
+
 .header {
   background-color: #39C5BB; /* Light blue */
   display: flex;
@@ -7,14 +8,33 @@
   padding: 0 20px; /* Adds padding on left and right sides of the header */
 }
 
+.logo-link {
+  text-decoration: none; /* Remove underline from the Link */
+}
+
 .logo {
   color: white;
-  font-size: 1.7em;
+  font-size: 1.7em; /* Consistent font size */
+  font-weight: 700; /* Makes the text bold */
   margin-right: 40px; /* Adds space to the right of 'HuskyAdoption' */
+  font-family: 'Helvetica Neue', sans-serif; /* Ensure consistent font */
 }
 
 .sign-in {
   color: white;
   text-decoration: none;
   margin-left: 40px; /* Adds space to the left of 'Sign In' */
+  font-family: 'Helvetica Neue', sans-serif; /* Ensure consistent font */
+  font-weight: 400; /* Normal font weight */
+  font-size: 1em; /* Consistent font size */
+}
+
+/* Optional: Add hover effects to the logo */
+.logo-link:hover .logo {
+  color: #e0e0e0; /* Slight color change on hover */
+}
+
+/* Optional: Add hover effects to the sign-in link */
+.sign-in:hover {
+  text-decoration: underline;
 }

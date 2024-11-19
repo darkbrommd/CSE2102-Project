@@ -1,4 +1,5 @@
 // src/components/AdoptionGallery.js
+
 import React, { useEffect, useState } from 'react';
 import PetCard from './PetCard';
 import './AdoptionGallery.css';
@@ -50,7 +51,7 @@ function AdoptionGallery() {
         {/* Pet Cards */}
         <div className="gallery">
           {displayedPets.map((pet) => (
-            <PetCard key={pet.id} image={pet.imageUrl} name={pet.name} />
+            <PetCard key={pet.id} id={pet.id} image={pet.imageUrl} name={pet.name} />
           ))}
         </div>
 

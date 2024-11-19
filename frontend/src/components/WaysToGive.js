@@ -5,8 +5,8 @@ import './WaysToGive.css';
 function WaysToGive() {
   return (
     <div className="ways-to-give">
-      <h3>WAYS TO GIVE</h3>
-      <p>Find out ways you can donate or help the process!</p>
+      <h2>Ways to Give</h2>
+      <p>Explore the various ways you can support our mission and make a lasting impact.</p>
     </div>
   );
 }

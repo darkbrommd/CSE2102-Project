@@ -1,0 +1,40 @@
+/* src/components/SidebarNavigation.css */
+
+.sidebar-navigation {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-navigation h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .sidebar-navigation ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar-navigation ul li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .sidebar-navigation ul li:hover {
+    background-color: #39C5BB;
+    color: #fff;
+  }
+  
+  .sidebar-navigation ul li.active {
+    background-color: #007BFF;
+    color: #fff;
+  }
+  
