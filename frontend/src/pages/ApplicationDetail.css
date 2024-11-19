@@ -1,0 +1,63 @@
+/* src/pages/ApplicationDetail.css */
+
+.application-detail-page {
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #000;
+  }
+  
+  .application-detail-content {
+    text-align: center;
+    padding: 40px auto;
+    background-color: #f3f4f6;
+    min-height: 80vh;
+  }
+  
+  .application-detail-content h1 {
+    font-size: 2.5em;
+    color: #007bff;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .application-detail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pet-image {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .application-info {
+    max-width: 600px;
+    text-align: left;
+  }
+  
+  .application-info h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 2em;
+    color: #333;
+  }
+  
+  .application-info p {
+    margin: 8px 0;
+    font-size: 1.2em;
+    color: #555;
+  }
+  
+  .application-info p strong {
+    color: #333;
+  }
+  

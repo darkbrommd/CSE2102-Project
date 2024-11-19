@@ -1,11 +1,11 @@
-/* src/pages/Register.css */
+/* src/pages/ChangeProfile.css */
 
 html, body, #root {
     height: 100%;
     margin: 0;
   }
   
-  .register-page {
+  .change-profile-page {
     font-family: 'Helvetica Neue', sans-serif;
     color: #000;
     text-align: center;
@@ -34,7 +34,7 @@ html, body, #root {
     justify-content: center;
   }
   
-  .register-box {
+  .change-profile-box {
     background-color: rgba(255, 255, 255, 0.85);
     padding: 30px;
     border-radius: 10px;
@@ -42,7 +42,7 @@ html, body, #root {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .register-box h2 {
+  .change-profile-box h2 {
     margin-top: 0;
     font-size: 1.8em;
     margin-bottom: 20px;
@@ -83,12 +83,12 @@ html, body, #root {
     background-color: #33b3aa;
   }
   
-  .register-box form {
+  .change-profile-box form {
     display: flex;
     flex-direction: column;
   }
   
-  .register-box input {
+  .change-profile-box input {
     padding: 12px;
     margin: 8px 0;
     border: 1px solid #ccc;
@@ -96,12 +96,22 @@ html, body, #root {
     font-size: 16px;
   }
   
-  .register-box input:focus {
+  .change-profile-box input:focus {
     border-color: #39C5BB;
     outline: none;
   }
   
-  .register-box button[type='submit'] {
+  .password-change-section {
+    margin-top: 20px;
+  }
+  
+  .password-change-section h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .change-profile-box button[type='submit'] {
     background-color: #39C5BB;
     color: #fff;
     padding: 12px;
@@ -113,37 +123,8 @@ html, body, #root {
     font-size: 16px;
   }
   
-  .register-box button[type='submit']:hover {
+  .change-profile-box button[type='submit']:hover {
     background-color: #33b3aa;
-  }
-  
-  .login-link {
-    display: block;
-    margin: 20px 0 10px;
-    color: #39C5BB;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .login-link:hover {
-    text-decoration: underline;
-  }
-  
-  .google-signin {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-top: 10px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .google-signin img {
-    width: 200px;
-    height: auto;
   }
   
   .error-message {
@@ -152,7 +133,7 @@ html, body, #root {
     border: 1px solid #D8000C;
     padding: 10px;
     border-radius: 5px;
-    margin-top: 0px;
+    margin-top: 10px;
     font-size: 14px;
     text-align: center; /* Center align text */
     line-height: 1; /* Adjust line spacing for better readability */
@@ -160,3 +141,19 @@ html, body, #root {
     margin-left: auto; /* Center horizontally */
     margin-right: auto;
   }
+  
+  .success-message {
+    color: #4F8A10; /* Dark green color for success */
+    background-color: #DFF2BF; /* Light green background */
+    border: 1px solid #4F8A10;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center; /* Center align text */
+    line-height: 1; /* Adjust line spacing for better readability */
+    max-width: 300px; /* Limit width for better aesthetics */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto;
+  }
+  

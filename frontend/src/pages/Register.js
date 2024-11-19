@@ -1,21 +1,22 @@
-// src/pages/Register.js 
+// src/pages/Register.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Header from '../components/Header'; // Import the Header component
 import './Register.css';
 
 function Register() {
   const navigate = useNavigate();
-  
+
   const [profilePicture, setProfilePicture] = useState(null);
   const [preview, setPreview] = useState(null);
-  
+
   // State variables for form fields
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [zipCode, setZipCode] = useState('');
-  
+
   // State for handling error messages
   const [error, setError] = useState('');
 
@@ -43,7 +44,7 @@ function Register() {
       reader.readAsDataURL(file);
     }
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -94,11 +95,8 @@ function Register() {
 
   return (
     <div className="register-page">
-      {/* Header */}
-      <header className="header">
-        <h1 className="logo">HuskyAdoption</h1>
-      </header>
-
+      <Header /> {/* Use the Header component */}
+      
       {/* Background Image */}
       <div className="background-image">
         {/* Register Box */}

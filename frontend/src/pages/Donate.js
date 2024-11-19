@@ -1,8 +1,9 @@
+// src/pages/Donate.js
 import React, { useState, useRef } from 'react';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import WaysToGive from '../components/WaysToGive';
-import ThankYouPage from '../pages/ThankYouPage';
+import ThankYouPage from './ThankYouPage';
 import './Donate.css';
 import axios from 'axios';
 
@@ -50,11 +51,11 @@ function Donate() {
       subscribe,
       consent,
       taxReceipt,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/add_donation', donationData);
+      await axios.post('http://127.0.0.1:5000/add_donation', donationData);
       setDonationSuccess(true);
       setDonationDetails(donationData);
       resetForm();
@@ -92,12 +93,14 @@ function Donate() {
     <div>
       <Header />
       <Navbar />
-      <WaysToGive />
       <div className="donate-page">
-        <h2>We accept a wide range of payment methods, including Visa, Mastercard, and American Express.</h2>
-        <p>Below is the form to support our work:</p>
+        <h1>Support Our Mission</h1>
+        <p className="intro-text">
+          Your generosity fuels our efforts to make a real difference. Contribute today and become a part of our journey toward positive change.
+        </p>
+        <WaysToGive />
 
-        {/* Display success or error message */}
+        {/* Feedback Message */}
         {feedbackMessage && (
           <p ref={feedbackRef} className={`feedback-message ${feedbackMessage.type}`}>
             {feedbackMessage.text}
@@ -107,15 +110,23 @@ function Donate() {
         <form className="donation-form" onSubmit={handleSubmit}>
           {/* Donation Amount */}
           <div className="form-section">
-            <h3>Donation Amount</h3>
+            <h2>Donation Amount</h2>
             <div className="preset-amounts">
-              <button type="button" onClick={() => setDonationAmount(10)}>$10</button>
-              <button type="button" onClick={() => setDonationAmount(25)}>$25</button>
-              <button type="button" onClick={() => setDonationAmount(50)}>$50</button>
-              <button type="button" onClick={() => setDonationAmount(100)}>$100</button>
+              <button type="button" onClick={() => setDonationAmount(10)}>
+                $10
+              </button>
+              <button type="button" onClick={() => setDonationAmount(25)}>
+                $25
+              </button>
+              <button type="button" onClick={() => setDonationAmount(50)}>
+                $50
+              </button>
+              <button type="button" onClick={() => setDonationAmount(100)}>
+                $100
+              </button>
             </div>
             <label>
-              Custom Amount:
+              Or Enter a Custom Amount:
               <input
                 type="number"
                 min="1"
@@ -128,8 +139,8 @@ function Donate() {
 
           {/* Donation Frequency */}
           <div className="form-section">
-            <h3>Donation Frequency</h3>
-            <label>
+            <h2>Donation Frequency</h2>
+            <label className="radio-label">
               <input
                 type="radio"
                 name="frequency"
@@ -139,7 +150,7 @@ function Donate() {
               />
               One-Time
             </label>
-            <label>
+            <label className="radio-label">
               <input
                 type="radio"
                 name="frequency"
@@ -153,46 +164,27 @@ function Donate() {
 
           {/* Personal Information */}
           <div className="form-section">
-            <h3>Personal Information</h3>
+            <h2>Personal Information</h2>
             <label>
               Name:
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
             </label>
             <label>
               Email:
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </label>
             <label>
               Phone Number:
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+              <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </label>
           </div>
 
           {/* Payment Information */}
           <div className="form-section">
-            <h3>Payment Information</h3>
+            <h2>Payment Information</h2>
             <label>
               Card Number:
-              <input
-                type="text"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                required
-              />
+              <input type="text" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} required />
             </label>
             <label>
               Expiry Date (MM/YY):
@@ -206,12 +198,7 @@ function Donate() {
             </label>
             <label>
               CVV:
-              <input
-                type="text"
-                value={cvv}
-                onChange={(e) => setCvv(e.target.value)}
-                required
-              />
+              <input type="text" value={cvv} onChange={(e) => setCvv(e.target.value)} required />
             </label>
             <label>
               Billing Address:
@@ -224,18 +211,13 @@ function Donate() {
             </label>
             <label>
               Zip Code:
-              <input
-                type="text"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
-                required
-              />
+              <input type="text" value={zipCode} onChange={(e) => setZipCode(e.target.value)} required />
             </label>
           </div>
 
           {/* Additional Options */}
           <div className="form-section">
-            <h3>Additional Options</h3>
+            <h2>Additional Options</h2>
             <label>
               Dedicate This Donation:
               <input
@@ -245,7 +227,7 @@ function Donate() {
                 onChange={(e) => setDedication(e.target.value)}
               />
             </label>
-            <label>
+            <label className="checkbox-label">
               <input
                 type="checkbox"
                 checked={anonymous}
@@ -255,17 +237,13 @@ function Donate() {
             </label>
             <label>
               Employer (for matching donations):
-              <input
-                type="text"
-                value={employer}
-                onChange={(e) => setEmployer(e.target.value)}
-              />
+              <input type="text" value={employer} onChange={(e) => setEmployer(e.target.value)} />
             </label>
           </div>
 
           {/* Newsletter Signup */}
           <div className="form-section">
-            <label>
+            <label className="checkbox-label">
               <input
                 type="checkbox"
                 checked={subscribe}
@@ -277,7 +255,7 @@ function Donate() {
 
           {/* Consent and Tax Receipt */}
           <div className="form-section">
-            <label>
+            <label className="checkbox-label">
               <input
                 type="checkbox"
                 checked={consent}
@@ -286,7 +264,7 @@ function Donate() {
               />
               I agree to the terms, conditions, and privacy policy
             </label>
-            <label>
+            <label className="checkbox-label">
               <input
                 type="checkbox"
                 checked={taxReceipt}
@@ -297,7 +275,9 @@ function Donate() {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="submit-button">Donate Now</button>
+          <button type="submit" className="submit-button">
+            Donate Now
+          </button>
         </form>
       </div>
     </div>

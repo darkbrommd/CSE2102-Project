@@ -20,6 +20,8 @@ html, body, #root {
 .logo {
   color: #fff;
   margin: 0;
+  text-decoration: none; /* Remove underline */
+  font-family: 'Helvetica Neue', sans-serif; /* Ensure consistent font */
 }
 
 .background-image {
