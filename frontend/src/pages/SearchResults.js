@@ -22,6 +22,11 @@ function SearchResults() {
   const [allPets, setAllPets] = useState([]); // Stores all fetched pets
   const [searchResults, setSearchResults] = useState([]); // Stores filtered pets
 
+  // State variables for available filter options
+  const [availablePetTypes, setAvailablePetTypes] = useState([]);
+  const [availableColors, setAvailableColors] = useState([]);
+  const [availableSizes, setAvailableSizes] = useState([]);
+
   const navigate = useNavigate();
 
   // Function to fetch pets based on mandatory filters
@@ -44,16 +49,29 @@ function SearchResults() {
       const data = await response.json();
       setAllPets(data); // Store all fetched pets
       setSearchResults(data); // Initialize searchResults with all pets
+
+      // Derive unique filter options from fetched data
+      const uniquePetTypes = [...new Set(data.map(pet => pet.breed))].sort();
+      const uniqueColors = [...new Set(data.map(pet => pet.color))].filter(Boolean).sort();
+      const uniqueSizes = [...new Set(data.map(pet => pet.size))].filter(Boolean).sort();
+
+      setAvailablePetTypes(uniquePetTypes);
+      setAvailableColors(uniqueColors);
+      setAvailableSizes(uniqueSizes);
     } catch (err) {
       console.error('Error fetching pets:', err);
       setAllPets([]);
       setSearchResults([]);
+      setAvailablePetTypes([]);
+      setAvailableColors([]);
+      setAvailableSizes([]);
     }
   };
 
   // Fetch pets when mandatory filters change
   useEffect(() => {
     fetchPets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [distance, zipCode, includeShippable]);
 
   // Function to apply optional filters
@@ -99,6 +117,7 @@ function SearchResults() {
   // Apply filters whenever any optional filter changes
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [petTypes, color, size, minAge, maxAge, searchQuery]);
 
   // Function to handle search button click or Enter key press
@@ -188,7 +207,7 @@ function SearchResults() {
         <div className="main-content">
           {/* Filter Panel */}
           <div className="filter-panel">
-            <h3>{searchResults.length} matches</h3>
+            <h3>{searchResults.length} {searchResults.length === 1 ? 'match' : 'matches'}</h3>
             {/* Applied Filters */}
             <div className="applied-filters">
               {getAppliedFilters().map((filter, index) => (
@@ -202,6 +221,7 @@ function SearchResults() {
             </div>
             {/* Filters */}
             <div className="filters">
+              {/* Distance Filter */}
               <label>Distance:</label>
               <select value={distance} onChange={e => setDistance(e.target.value)}>
                 <option value="10">10 miles</option>
@@ -210,6 +230,8 @@ function SearchResults() {
                 <option value="50">50 miles</option>
                 <option value="100">100 miles</option>
               </select>
+
+              {/* ZIP Code Filter */}
               <input
                 type="text"
                 placeholder="ZIP Code"
@@ -217,6 +239,7 @@ function SearchResults() {
                 onChange={e => setZipCode(e.target.value)}
               />
 
+              {/* Include Shippable Pets Filter */}
               <label>
                 <input
                   type="checkbox"
@@ -226,84 +249,102 @@ function SearchResults() {
                 Include Shippable Pets
               </label>
 
+              {/* Age Range Filter */}
               <label>Age Range:</label>
-              <select value={minAge} onChange={e => setMinAge(e.target.value)}>
-                <option value="">Min Age</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                {/* Add more options as needed */}
-              </select>
-              <select value={maxAge} onChange={e => setMaxAge(e.target.value)}>
-                <option value="">Max Age</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                {/* Add more options as needed */}
-              </select>
-
-              <label>Pet Type:</label>
-              <div className="pet-types">
-                {['Cat', 'Parrot', 'Dog'].map(type => (
-                  <label key={type}>
-                    <input
-                      type="checkbox"
-                      value={type}
-                      checked={petTypes.includes(type)}
-                      onChange={e => {
-                        const value = e.target.value;
-                        setPetTypes(prev =>
-                          prev.includes(value) ? prev.filter(t => t !== value) : [...prev, value]
-                        );
-                      }}
-                    />
-                    {type}
-                  </label>
-                ))}
-                {/* Add more pet types as needed */}
+              <div className="age-range">
+                <select value={minAge} onChange={e => setMinAge(e.target.value)}>
+                  <option value="">Min Age</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  {/* Add more options as needed */}
+                </select>
+                <select value={maxAge} onChange={e => setMaxAge(e.target.value)}>
+                  <option value="">Max Age</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  {/* Add more options as needed */}
+                </select>
               </div>
 
-              {/* Additional Categories */}
-              <label>Color:</label>
-              <div className="colors">
-                {['Black', 'White'].map(col => (
-                  <label key={col}>
-                    <input
-                      type="checkbox"
-                      value={col}
-                      checked={color.includes(col)}
-                      onChange={e => {
-                        const value = e.target.value;
-                        setColor(prev =>
-                          prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
-                        );
-                      }}
-                    />
-                    {col}
-                  </label>
-                ))}
-                {/* Add more colors as needed */}
-              </div>
+              {/* Pet Type Filter */}
+              {availablePetTypes.length > 0 && (
+                <>
+                  <label>Pet Type:</label>
+                  <div className="pet-types">
+                    {availablePetTypes.map(type => (
+                      <label key={type}>
+                        <input
+                          type="checkbox"
+                          value={type}
+                          checked={petTypes.includes(type)}
+                          onChange={e => {
+                            const value = e.target.value;
+                            setPetTypes(prev =>
+                              prev.includes(value) ? prev.filter(t => t !== value) : [...prev, value]
+                            );
+                          }}
+                        />
+                        {type}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
 
-              <label>Size:</label>
-              <div className="sizes">
-                {['Small', 'Medium', 'Large'].map(s => (
-                  <label key={s}>
-                    <input
-                      type="checkbox"
-                      value={s}
-                      checked={size.includes(s)}
-                      onChange={e => {
-                        const value = e.target.value;
-                        setSize(prev =>
-                          prev.includes(value) ? prev.filter(sz => sz !== value) : [...prev, value]
-                        );
-                      }}
-                    />
-                    {s}
-                  </label>
-                ))}
-              </div>
+              {/* Color Filter */}
+              {availableColors.length > 0 && (
+                <>
+                  <label>Color:</label>
+                  <div className="colors">
+                    {availableColors.map(col => (
+                      <label key={col}>
+                        <input
+                          type="checkbox"
+                          value={col}
+                          checked={color.includes(col)}
+                          onChange={e => {
+                            const value = e.target.value;
+                            setColor(prev =>
+                              prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
+                            );
+                          }}
+                        />
+                        {col}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Size Filter */}
+              {availableSizes.length > 0 && (
+                <>
+                  <label>Size:</label>
+                  <div className="sizes">
+                    {availableSizes.map(s => (
+                      <label key={s}>
+                        <input
+                          type="checkbox"
+                          value={s}
+                          checked={size.includes(s)}
+                          onChange={e => {
+                            const value = e.target.value;
+                            setSize(prev =>
+                              prev.includes(value) ? prev.filter(sz => sz !== value) : [...prev, value]
+                            );
+                          }}
+                        />
+                        {s}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -316,21 +357,11 @@ function SearchResults() {
                 </div>
                 <div className="pet-info">
                   <h4>{pet.name}</h4>
-                  <p>
-                    <strong>Breed:</strong> {pet.breed}
-                  </p>
-                  <p>
-                    <strong>Age:</strong> {pet.age}
-                  </p>
-                  <p>
-                    <strong>Gender:</strong> {pet.gender}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {pet.location}
-                  </p>
-                  <p>
-                    <strong>Distance:</strong> {pet.distance} miles
-                  </p>
+                  <p><strong>Breed:</strong> {pet.breed}</p>
+                  <p><strong>Age:</strong> {pet.age}</p>
+                  <p><strong>Gender:</strong> {pet.gender}</p>
+                  <p><strong>Location:</strong> {pet.location}</p>
+                  <p><strong>Distance:</strong> {pet.distance} miles</p>
                   <button
                     className="adopt-button"
                     onClick={() => navigate(`/PetProfile/${pet.id}`)} // Navigate to the PetProfile page
