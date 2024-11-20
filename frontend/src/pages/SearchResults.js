@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import './SearchResults.css';
@@ -68,96 +69,40 @@ function SearchResults() {
   };
 
   // Fetch search results when filters change
+  
   useEffect(() => {
-    console.log('Fetching search results with current filters...');
-    // Simulate API call with more pet entries to fill the grid
-    setTimeout(() => {
-      setSearchResults([
-        {
-          name: 'Snowflake',
-          breed: 'Pomeranian',
-          age: '2 years',
-          gender: 'Female',
-          location: 'Storrs, CT',
-          distance: '5 miles',
-          image: '/public/images/puppies-background.png',
-        },
-        {
-          name: 'Fluffy',
-          breed: 'Husky',
-          age: '1 year',
-          gender: 'Male',
-          location: 'Hartford, CT',
-          distance: '10 miles',
-          image: '/images/husky.png',
-        },
-        {
-          name: 'Whiskers',
-          breed: 'Kitten',
-          age: '6 months',
-          gender: 'Female',
-          location: 'New Haven, CT',
-          distance: '8 miles',
-          image: '/images/kitten.png',
-        },
-        {
-          name: 'Coco',
-          breed: 'Parrot',
-          age: '3 years',
-          gender: 'Male',
-          location: 'Boston, MA',
-          distance: '15 miles',
-          image: '/images/parrot.png',
-        },
-        {
-          name: 'Hopper',
-          breed: 'Bunny',
-          age: '1 year',
-          gender: 'Male',
-          location: 'Providence, RI',
-          distance: '12 miles',
-          image: '/images/bunny.png',
-        },
-        {
-          name: 'Shelly',
-          breed: 'Turtle',
-          age: '5 years',
-          gender: 'Female',
-          location: 'Springfield, MA',
-          distance: '20 miles',
-          image: '/images/turtle.png',
-        },
-        {
-          name: 'Buddy',
-          breed: 'Golden Retriever',
-          age: '4 years',
-          gender: 'Male',
-          location: 'Bridgeport, CT',
-          distance: '7 miles',
-          image: '/images/golden-retriever.png',
-        },
-        {
-          name: 'Luna',
-          breed: 'Cat',
-          age: '2 years',
-          gender: 'Female',
-          location: 'Albany, NY',
-          distance: '25 miles',
-          image: '/images/kitten.png',
-        },
-        {
-          name: 'Charlie',
-          breed: 'Dog',
-          age: '3 years',
-          gender: 'Male',
-          location: 'Stamford, CT',
-          distance: '9 miles',
-          image: '/images/husky.png',
-        },
-        // Add more pets as needed
-      ]);
-    }, 500);
+    const fetchPets = async () => {
+      console.log('Fetching search results with current filters...');
+      try {
+        // Construct query parameters based on filters
+        const params = new URLSearchParams();
+  
+        if (distance) params.append('distance', distance);
+        if (zipCode) params.append('zipCode', zipCode);
+        if (includeShippable) params.append('includeShippable', includeShippable);
+        if (minAge) params.append('minAge', minAge);
+        if (maxAge) params.append('maxAge', maxAge);
+        if (petTypes.length > 0) params.append('petTypes', petTypes.join(','));
+        if (color.length > 0) params.append('color', color.join(','));
+        if (size.length > 0) params.append('size', size.join(','));
+  
+        // Fetch pets from the backend API
+        const response = await fetch(`http://127.0.0.1:5000/pets?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch pets');
+        }
+  
+        const data = await response.json();
+        setSearchResults(data); // Update the search results with the fetched data
+      } catch (err) {
+        console.error('Error fetching pets:', err);
+        setSearchResults([]); // Clear results in case of error
+      }
+    };
+  
+    fetchPets();
   }, [distance, zipCode, includeShippable, minAge, maxAge, petTypes, color, size]);
+  
 
   // Handle Enter Key Press in Search Input
   const handleKeyPress = (e) => {
@@ -165,7 +110,8 @@ function SearchResults() {
       handleSearch();
     }
   };
-
+  const navigate = useNavigate();
+  
   return (
     <div className="search-results-page">
       <Header />
@@ -420,13 +366,19 @@ function SearchResults() {
                   <p><strong>Gender:</strong> {pet.gender}</p>
                   <p><strong>Location:</strong> {pet.location}</p>
                   <p><strong>Distance:</strong> {pet.distance}</p>
-                  <button className="adopt-button">Adopt me!</button>
+                  <button
+                    className="adopt-button"
+                    onClick={() => navigate(`/PetProfile/${pet.id}`)} // Navigate to the PetProfile page
+                  >
+                    Adopt me!
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
 
       {/* Optional: Remove this if you don't need the end slogan */}
       {/* <div className="end-slogan">
