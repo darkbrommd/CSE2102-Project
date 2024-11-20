@@ -1,183 +1,187 @@
 /* src/pages/Donate.css */
 
-/* Container for the Donate Page */
+/* General Styles */
 .donate-page {
-    padding: 40px 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #f9f9f9; /* Light background for contrast */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Heading Styles */
-  .donate-page h2 {
-    color: #0000FF; /* Blue color for headings */
-    font-size: 2em;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .donate-page p {
-    font-size: 1.1em;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-  }
-  
-  /* Donation Form Styles */
-  .donation-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Each Form Section */
-  .form-section {
-    margin-bottom: 25px;
-    padding: 20px;
-    background-color: #ffffff; /* White background for form sections */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-  }
-  
-  /* Section Headings */
-  .form-section h3 {
-    color: #0000FF;
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 5px;
-  }
-  
-  /* Preset Donation Amount Buttons */
-  .preset-amounts {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-  }
-  
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f3f4f6;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.donate-page h1 {
+  font-size: 2.5em;
+  color: #007bff;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.intro-text {
+  font-size: 1.2em;
+  color: #555;
+  max-width: 700px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Donation Form Styles */
+.donation-form {
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.form-section h2 {
+  font-size: 1.8em;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: bold;
+  position: relative;
+}
+
+.form-section h2:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 40px;
+  height: 3px;
+  background: #007bff;
+  border-radius: 4px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 15px;
+}
+
+label input[type='text'],
+label input[type='email'],
+label input[type='number'],
+label input[type='tel'] {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+
+label input[type='text']:focus,
+label input[type='email']:focus,
+label input[type='number']:focus,
+label input[type='tel']:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.radio-label,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 1em;
+  color: #333;
+}
+
+.radio-label input,
+.checkbox-label input {
+  margin-right: 10px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Preset Donation Amount Buttons */
+.preset-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.preset-amounts button {
+  flex: 1 1 calc(25% - 10px);
+  padding: 15px 0;
+  background-color: #e0f0ff;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #007bff;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.preset-amounts button:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  padding: 15px 0;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.5em;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+/* Feedback Message */
+.feedback-message {
+  font-size: 1em;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.feedback-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.feedback-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .preset-amounts button {
-    padding: 10px 20px;
-    background-color: #ADD8E6; /* Light Blue */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+    flex: 1 1 calc(50% - 10px);
   }
-  
-  .preset-amounts button:hover {
-    background-color: #87CEEB; /* Dodger Blue on Hover */
-  }
-  
-  /* Label and Input Styles */
-  label {
-    display: block;
-    margin-bottom: 15px;
-    font-size: 1em;
-    color: #333;
-  }
-  
-  label input[type='text'],
-  label input[type='email'],
-  label input[type='number'],
-  label input[type='tel'] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
-  }
-  
-  label input[type='text']:focus,
-  label input[type='email']:focus,
-  label input[type='number']:focus,
-  label input[type='tel']:focus {
-    border-color: #0000FF; /* Blue border on focus */
-    outline: none;
-  }
-  
-  /* Radio and Checkbox Styles */
-  .form-section input[type='radio'],
-  .form-section input[type='checkbox'] {
-    margin-right: 10px;
-    transform: scale(1.2);
-    cursor: pointer;
-  }
-  
-  .form-section label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  /* Security Message */
-  .security-message {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 10px;
-    text-align: left;
-  }
-  
-  /* Submit Button */
+
   .submit-button {
-    padding: 15px 30px;
-    background-color: #0000FF; /* Blue */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
     font-size: 1.2em;
-    transition: background-color 0.3s ease;
-    align-self: center;
-    margin-top: 10px;
   }
-  
-  .submit-button:hover {
-    background-color: #1E90FF; /* Dodger Blue on Hover */
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 600px) {
-    .preset-amounts {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  
-    .preset-amounts button {
-      width: 100%;
-    }
-  
-    .form-section {
-      padding: 15px;
-    }
-  
-    .submit-button {
-      width: 100%;
-    }
-  }
-  
-  .feedback-message {
-    font-size: 1rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border-radius: 5px;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .feedback-message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-  
-  .feedback-message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
+}

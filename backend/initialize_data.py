@@ -3,9 +3,9 @@ This script initializes the database with sample data for testing purposes.
 """
 
 from datetime import datetime
-from backend.db import db
-from backend.models import User, Pet, Donation, Adoption
-from backend.main import app
+from db import db
+from models import User, Pet, Donation, Adoption
+from main import app
 
 def initialize_data():
     """
@@ -53,7 +53,7 @@ def initialize_data():
             gender="Male",
             special_needs=False,
             available_for_adoption=True,
-            photo="public/pet_photos/buddy.jpg"
+            photo="public/images/husky.png"
         )
 
         pet2 = Pet(
@@ -66,11 +66,37 @@ def initialize_data():
             gender="Female",
             special_needs=True,
             available_for_adoption=False,
-            photo="public/pet_photos/whiskers.jpg"
+            photo="public/images/bunny.png"
+        )
+        pet3 = Pet(
+            name="Whiskers2",
+            species="Cat",
+            breed="Siamese",
+            age=2,
+            size="Small",
+            location="Los Angeles",
+            gender="Female",
+            special_needs=True,
+            available_for_adoption=False,
+            photo="public/images/bunny.png"
+        )
+        pet4 = Pet(
+            name="Whiskers3",
+            species="Cat",
+            breed="Siamese",
+            age=10,
+            size="Medium",
+            location="Los Angeles",
+            gender="Female",
+            special_needs=True,
+            available_for_adoption=False,
+            photo="public/images/bunny.png"
         )
 
         db.session.add(pet1)
         db.session.add(pet2)
+        db.session.add(pet3)
+        db.session.add(pet4)
         db.session.commit()  # Commit to assign IDs
         print("Pets added.")
 

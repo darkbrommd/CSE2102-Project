@@ -8,6 +8,13 @@ import RecentDonations from './pages/RecentDonations';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Contact from './pages/Contact';
+import SearchResults from './pages/SearchResults';
+import UserDashboard from './pages/UserDashboard';
+import ChangeProfile from './pages/ChangeProfile';
+import MyApplications from './pages/MyApplications';
+import ApplicationDetail from './pages/ApplicationDetail';
+import PetProfile from './pages/PetProfile';
+
 // Import other pages as needed
 
 function App() {
@@ -21,6 +28,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/search" element={<SearchResults/>} />
+        <Route path="/profile" element={<UserDashboard/>} />
+        <Route path="/change-profile" element={<ChangeProfile/>} />
+        <Route path="/my-applications" element={<MyApplications/>} />
+        <Route path="/application/:applicationId" element={<ApplicationDetail />} />
+        <Route path="/PetProfile/:petId" element={<PetProfile />} />
         {/* Add other routes as needed */}
       </Routes>
     </Router>
