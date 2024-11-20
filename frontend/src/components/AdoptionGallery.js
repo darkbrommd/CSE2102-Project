@@ -1,5 +1,3 @@
-// src/components/AdoptionGallery.js
-
 import React, { useEffect, useState } from 'react';
 import PetCard from './PetCard';
 import './AdoptionGallery.css';
@@ -7,19 +5,28 @@ import './AdoptionGallery.css';
 function AdoptionGallery() {
   const [pets, setPets] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const petsPerView = 3;
 
   useEffect(() => {
-    // Mock data representing pets available for adoption
-    const localPets = [
-      { id: 1, name: 'Husky', imageUrl: '/images/husky.png' },
-      { id: 2, name: 'Kitten', imageUrl: '/images/kitten.png' },
-      { id: 3, name: 'Golden Retriever', imageUrl: '/images/golden-retriever.png' },
-      { id: 4, name: 'Bunny', imageUrl: '/images/bunny.png' },
-      { id: 5, name: 'Parrot', imageUrl: '/images/parrot.png' },
-      { id: 6, name: 'Turtle', imageUrl: '/images/turtle.png' },
-    ];
-    setPets(localPets);
+    const fetchPets = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/pets'); // Fetch from the backend API
+        if (!response.ok) {
+          throw new Error('Failed to fetch pet data');
+        }
+        const data = await response.json();
+        setPets(data); // Update pets state with the fetched data
+      } catch (err) {
+        setError('Failed to load pets. Please try again later.');
+        console.error('Error fetching pets:', err);
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or failure
+      }
+    };
+
+    fetchPets();
   }, []);
 
   const handlePrev = () => {
@@ -34,6 +41,14 @@ function AdoptionGallery() {
 
   // Determine the pets to display
   const displayedPets = pets.slice(currentIndex, currentIndex + petsPerView);
+
+  if (loading) {
+    return <div>Loading pets...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="adoption-gallery">
@@ -50,9 +65,18 @@ function AdoptionGallery() {
 
         {/* Pet Cards */}
         <div className="gallery">
-          {displayedPets.map((pet) => (
-            <PetCard key={pet.id} id={pet.id} image={pet.imageUrl} name={pet.name} />
-          ))}
+          {displayedPets.length > 0 ? (
+            displayedPets.map((pet) => (
+              <PetCard
+                key={pet.id}
+                id={pet.id}
+                image={pet.photo || '/default-pet-image.png'} // Fallback image
+                name={pet.name}
+              />
+            ))
+          ) : (
+            <p>No pets available for adoption at the moment.</p>
+          )}
         </div>
 
         {/* Right Arrow */}
