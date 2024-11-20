@@ -80,10 +80,23 @@ def initialize_data():
             available_for_adoption=False,
             photo="public/images/bunny.png"
         )
+        pet4 = Pet(
+            name="Whiskers3",
+            species="Cat",
+            breed="Siamese",
+            age=10,
+            size="Medium",
+            location="Los Angeles",
+            gender="Female",
+            special_needs=True,
+            available_for_adoption=False,
+            photo="public/images/bunny.png"
+        )
 
         db.session.add(pet1)
         db.session.add(pet2)
         db.session.add(pet3)
+        db.session.add(pet4)
         db.session.commit()  # Commit to assign IDs
         print("Pets added.")
 
