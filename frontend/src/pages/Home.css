@@ -2,7 +2,7 @@
 
 .home-page {
     min-height: 100vh; /* Ensure the page covers the full viewport height */
-    background-image: url('/images/background.jpg'); /* Replace with your actual image name */
+    background-image: url('/public/images/background.jpg'); /* Replace with your actual image name */
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;

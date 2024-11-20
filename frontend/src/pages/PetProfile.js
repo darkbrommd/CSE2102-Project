@@ -44,7 +44,7 @@ function PetProfile() {
           breed: 'Pomeranian',
           location: 'Storrs, CT',
           extraInfo: 'Very friendly and energetic.',
-          image: '/images/puppies-background.png',
+          image: '/public/images/puppies-background.png',
         },
         // Add more pet data as needed
       };

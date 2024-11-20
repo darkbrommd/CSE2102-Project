@@ -80,7 +80,7 @@ function SearchResults() {
           gender: 'Female',
           location: 'Storrs, CT',
           distance: '5 miles',
-          image: '/images/puppies-background.png',
+          image: '/public/images/puppies-background.png',
         },
         {
           name: 'Fluffy',
