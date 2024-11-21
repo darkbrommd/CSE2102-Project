@@ -114,7 +114,7 @@ function PetProfile() {
 
         {/* Right Side */}
         <div className="start-application">
-          <button onClick={() => navigate('/start-application')}>
+          <button onClick={() => navigate('/start-application/${petId}')}>
             Start Application
           </button>
         </div>

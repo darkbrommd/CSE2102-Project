@@ -222,8 +222,12 @@ function SearchResults() {
             {/* Filters */}
             <div className="filters">
               {/* Distance Filter */}
-              <label>Distance:</label>
-              <select value={distance} onChange={e => setDistance(e.target.value)}>
+              <label htmlFor="distance-select">Distance:</label>
+              <select
+                id="distance-select"
+                value={distance}
+                onChange={e => setDistance(e.target.value)}
+              >
                 <option value="10">10 miles</option>
                 <option value="20">20 miles</option>
                 <option value="30">30 miles</option>
@@ -232,8 +236,10 @@ function SearchResults() {
               </select>
 
               {/* ZIP Code Filter */}
+              <label htmlFor="zip-code-input">ZIP Code:</label>
               <input
                 type="text"
+                id="zip-code-input"
                 placeholder="ZIP Code"
                 value={zipCode}
                 onChange={e => setZipCode(e.target.value)}
@@ -250,9 +256,13 @@ function SearchResults() {
               </label>
 
               {/* Age Range Filter */}
-              <label>Age Range:</label>
+              <label htmlFor="min-age-select">Age Range:</label>
               <div className="age-range">
-                <select value={minAge} onChange={e => setMinAge(e.target.value)}>
+                <select
+                  id="min-age-select"
+                  value={minAge}
+                  onChange={e => setMinAge(e.target.value)}
+                >
                   <option value="">Min Age</option>
                   <option value="0">0</option>
                   <option value="1">1</option>
@@ -260,7 +270,11 @@ function SearchResults() {
                   <option value="3">3</option>
                   {/* Add more options as needed */}
                 </select>
-                <select value={maxAge} onChange={e => setMaxAge(e.target.value)}>
+                <select
+                  id="max-age-select"
+                  value={maxAge}
+                  onChange={e => setMaxAge(e.target.value)}
+                >
                   <option value="">Max Age</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -351,11 +365,11 @@ function SearchResults() {
           {/* Search Results */}
           <div className="results-grid">
             {searchResults.map((pet, index) => (
-              <div key={index} className="pet-card">
-                <div className="pet-image-container">
+              <div key={index} className="animal-card">
+                <div className="animal-image-container">
                   <img src={pet.image} alt={pet.name} />
                 </div>
-                <div className="pet-info">
+                <div className="animal-info">
                   <h4>{pet.name}</h4>
                   <p><strong>Breed:</strong> {pet.breed}</p>
                   <p><strong>Age:</strong> {pet.age}</p>
