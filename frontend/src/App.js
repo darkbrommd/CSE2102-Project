@@ -14,6 +14,7 @@ import ChangeProfile from './pages/ChangeProfile';
 import MyApplications from './pages/MyApplications';
 import ApplicationDetail from './pages/ApplicationDetail';
 import PetProfile from './pages/PetProfile';
+import StartApplication from "./pages/StartApplication";
 
 // Import other pages as needed
 
@@ -34,6 +35,7 @@ function App() {
         <Route path="/my-applications" element={<MyApplications/>} />
         <Route path="/application/:applicationId" element={<ApplicationDetail />} />
         <Route path="/PetProfile/:petId" element={<PetProfile />} />
+        <Route path="/start-application/:petId" element={<StartApplication />} />
         {/* Add other routes as needed */}
       </Routes>
     </Router>
