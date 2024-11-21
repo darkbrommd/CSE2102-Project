@@ -1,5 +1,3 @@
-// src/pages/PetProfile.js
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
@@ -15,57 +13,53 @@ function PetProfile() {
   const navigate = useNavigate();
   const { petId } = useParams();
   const [pet, setPet] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Simulate fetching pet data based on petId
   useEffect(() => {
     /**
-     * Fetch pet data by petId.
-     * TODO: Replace this with actual API call to fetch pet data by petId.
-     * For backend engineers: API endpoint should be something like /api/pets/:petId
+     * Fetch pet data by petId from the backend API.
      */
     const fetchPetData = async () => {
-      // Simulated pet data
-      const petData = {
-        1: {
-          id: 1,
-          name: 'Jonathan',
-          age: '2 years',
-          weight: '50 lbs',
-          breed: 'Siberian Husky',
-          location: 'New Haven, CT',
-          extraInfo: 'Loves to play in the snow and is great with kids.',
-          image: '/images/husky.png',
-        },
-        2: {
-          id: 2,
-          name: 'Snowflake',
-          age: '1 year',
-          weight: '15 lbs',
-          breed: 'Pomeranian',
-          location: 'Storrs, CT',
-          extraInfo: 'Very friendly and energetic.',
-          image: '/public/images/puppies-background.png',
-        },
-        // Add more pet data as needed
-      };
-
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const petInfo = petData[petId];
-
-      if (petInfo) {
-        setPet(petInfo);
-      } else {
-        // Handle pet not found
-        setPet(null);
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/pets/${petId}`); // Use your backend URL
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError('Pet not found');
+          } else {
+            setError('An error occurred while fetching pet data');
+          }
+          return;
+        }
+        const data = await response.json();
+        setPet(data);
+      } catch (err) {
+        console.error('Error fetching pet data:', err);
+        setError('Failed to fetch pet data');
+      } finally {
+        setLoading(false); // Ensure loading state is set to false
       }
     };
 
     fetchPetData();
   }, [petId]);
 
-  if (pet === null) {
+  if (loading) {
+    return (
+      <div className="pet-profile-page">
+        <Header />
+        <Navbar />
+        <div className="page-title">
+          <h1>Pet Profile</h1>
+        </div>
+        <div className="loading">
+          <h2>Loading pet details...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
     return (
       <div className="pet-profile-page">
         <Header />
@@ -74,7 +68,7 @@ function PetProfile() {
           <h1>Pet Profile</h1>
         </div>
         <div className="pet-not-found">
-          <h2>Pet not found</h2>
+          <h2>{error}</h2>
         </div>
       </div>
     );
@@ -94,7 +88,7 @@ function PetProfile() {
       <div className="pet-info-section">
         {/* Left Side */}
         <div className="pet-image-container">
-          <img src={pet.image} alt={pet.name} className="pet-image" />
+          <img src={pet.photo || '/default-pet-image.png'} alt={pet.name} className="pet-image" />
           <div className="pet-name">
             <h2>{pet.name}</h2>
           </div>
@@ -102,11 +96,11 @@ function PetProfile() {
 
         {/* Right Side */}
         <div className="pet-details">
-          <p><strong>Age:</strong> {pet.age}</p>
-          <p><strong>Weight:</strong> {pet.weight}</p>
-          <p><strong>Breed:</strong> {pet.breed}</p>
-          <p><strong>Location:</strong> {pet.location}</p>
-          <p><strong>Extra Info:</strong> {pet.extraInfo}</p>
+          <p><strong>Age:</strong> {pet.age || 'N/A'}</p>
+          <p><strong>Weight:</strong> {pet.size || 'N/A'}</p>
+          <p><strong>Breed:</strong> {pet.breed || 'N/A'}</p>
+          <p><strong>Location:</strong> {pet.location || 'N/A'}</p>
+          <p><strong>Extra Info:</strong> {pet.extraInfo || 'N/A'}</p>
         </div>
       </div>
 
@@ -115,8 +109,7 @@ function PetProfile() {
         {/* Left Side */}
         <div className="additional-info">
           <h3>About {pet.name}</h3>
-          <p>{pet.extraInfo}</p>
-          {/* Additional images or text can be added here */}
+          <p>{pet.extraInfo || 'No additional information provided.'}</p>
         </div>
 
         {/* Right Side */}

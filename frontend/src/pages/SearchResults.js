@@ -1,20 +1,129 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
 import './SearchResults.css';
 
 function SearchResults() {
-  // State variables for filters
+  // State variables for mandatory filters
   const [distance, setDistance] = useState('30');
   const [zipCode, setZipCode] = useState('06269');
+
+  // State variables for optional filters
   const [includeShippable, setIncludeShippable] = useState(false);
   const [minAge, setMinAge] = useState('');
   const [maxAge, setMaxAge] = useState('');
   const [petTypes, setPetTypes] = useState([]);
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // State variables for pet data
+  const [allPets, setAllPets] = useState([]); // Stores all fetched pets
+  const [searchResults, setSearchResults] = useState([]); // Stores filtered pets
+
+  // State variables for available filter options
+  const [availablePetTypes, setAvailablePetTypes] = useState([]);
+  const [availableColors, setAvailableColors] = useState([]);
+  const [availableSizes, setAvailableSizes] = useState([]);
+
+  const navigate = useNavigate();
+
+  // Function to fetch pets based on mandatory filters
+  const fetchPets = async () => {
+    console.log('Fetching pets with mandatory filters...');
+    try {
+      const params = new URLSearchParams();
+
+      if (distance) params.append('distance', distance);
+      if (zipCode) params.append('zipCode', zipCode);
+
+      // Include shippable as it's a mandatory filter
+      params.append('includeShippable', includeShippable);
+
+      const response = await fetch(`http://127.0.0.1:5000/pets?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch pets');
+      }
+
+      const data = await response.json();
+      setAllPets(data); // Store all fetched pets
+      setSearchResults(data); // Initialize searchResults with all pets
+
+      // Derive unique filter options from fetched data
+      const uniquePetTypes = [...new Set(data.map(pet => pet.breed))].sort();
+      const uniqueColors = [...new Set(data.map(pet => pet.color))].filter(Boolean).sort();
+      const uniqueSizes = [...new Set(data.map(pet => pet.size))].filter(Boolean).sort();
+
+      setAvailablePetTypes(uniquePetTypes);
+      setAvailableColors(uniqueColors);
+      setAvailableSizes(uniqueSizes);
+    } catch (err) {
+      console.error('Error fetching pets:', err);
+      setAllPets([]);
+      setSearchResults([]);
+      setAvailablePetTypes([]);
+      setAvailableColors([]);
+      setAvailableSizes([]);
+    }
+  };
+
+  // Fetch pets when mandatory filters change
+  useEffect(() => {
+    fetchPets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [distance, zipCode, includeShippable]);
+
+  // Function to apply optional filters
+  const applyFilters = () => {
+    console.log('Applying filters to all pets...');
+    let filteredPets = [...allPets];
+
+    // Apply Pet Types filter
+    if (petTypes.length > 0) {
+      filteredPets = filteredPets.filter(pet => petTypes.includes(pet.breed));
+    }
+
+    // Apply Color filter
+    if (color.length > 0) {
+      filteredPets = filteredPets.filter(pet => pet.color && color.includes(pet.color));
+    }
+
+    // Apply Size filter
+    if (size.length > 0) {
+      filteredPets = filteredPets.filter(pet => pet.size && size.includes(pet.size));
+    }
+
+    // Apply Age filter only if minAge or maxAge is set
+    if (minAge || maxAge) {
+      filteredPets = filteredPets.filter(pet => {
+        const petAge = parseInt(pet.age, 10);
+        if (minAge && petAge < parseInt(minAge, 10)) return false;
+        if (maxAge && petAge > parseInt(maxAge, 10)) return false;
+        return true;
+      });
+    }
+
+    // Apply Search Query filter
+    if (searchQuery) {
+      filteredPets = filteredPets.filter(pet =>
+        pet.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setSearchResults(filteredPets);
+  };
+
+  // Apply filters whenever any optional filter changes
+  useEffect(() => {
+    applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [petTypes, color, size, minAge, maxAge, searchQuery]);
+
+  // Function to handle search button click or Enter key press
+  const handleSearch = () => {
+    applyFilters();
+  };
 
   // Generate applied filters based on state
   const getAppliedFilters = () => {
@@ -25,15 +134,15 @@ function SearchResults() {
     }
 
     if (petTypes.length > 0) {
-      petTypes.forEach((type) => appliedFilters.push(type));
+      petTypes.forEach(type => appliedFilters.push(type));
     }
 
     if (color.length > 0) {
-      color.forEach((col) => appliedFilters.push(col));
+      color.forEach(col => appliedFilters.push(col));
     }
 
     if (size.length > 0) {
-      size.forEach((s) => appliedFilters.push(s));
+      size.forEach(s => appliedFilters.push(s));
     }
 
     if (minAge || maxAge) {
@@ -44,123 +153,23 @@ function SearchResults() {
   };
 
   // Remove filter and update state
-  const removeFilter = (filterToRemove) => {
+  const removeFilter = filterToRemove => {
     if (filterToRemove === 'Shippable') {
       setIncludeShippable(false);
     } else if (petTypes.includes(filterToRemove)) {
-      setPetTypes(petTypes.filter((type) => type !== filterToRemove));
+      setPetTypes(petTypes.filter(type => type !== filterToRemove));
     } else if (color.includes(filterToRemove)) {
-      setColor(color.filter((col) => col !== filterToRemove));
+      setColor(color.filter(col => col !== filterToRemove));
     } else if (size.includes(filterToRemove)) {
-      setSize(size.filter((s) => s !== filterToRemove));
+      setSize(size.filter(s => s !== filterToRemove));
     } else if (filterToRemove.startsWith('Age:')) {
       setMinAge('');
       setMaxAge('');
     }
   };
 
-  // Handle Search Function
-  const handleSearch = () => {
-    console.log('Search triggered with query:', searchQuery);
-    // Implement your search logic here
-    // For demonstration, we'll just log the search query
-    // You might want to update the searchResults based on the query
-  };
-
-  // Fetch search results when filters change
-  useEffect(() => {
-    console.log('Fetching search results with current filters...');
-    // Simulate API call with more pet entries to fill the grid
-    setTimeout(() => {
-      setSearchResults([
-        {
-          name: 'Snowflake',
-          breed: 'Pomeranian',
-          age: '2 years',
-          gender: 'Female',
-          location: 'Storrs, CT',
-          distance: '5 miles',
-          image: '/public/images/puppies-background.png',
-        },
-        {
-          name: 'Fluffy',
-          breed: 'Husky',
-          age: '1 year',
-          gender: 'Male',
-          location: 'Hartford, CT',
-          distance: '10 miles',
-          image: '/images/husky.png',
-        },
-        {
-          name: 'Whiskers',
-          breed: 'Kitten',
-          age: '6 months',
-          gender: 'Female',
-          location: 'New Haven, CT',
-          distance: '8 miles',
-          image: '/images/kitten.png',
-        },
-        {
-          name: 'Coco',
-          breed: 'Parrot',
-          age: '3 years',
-          gender: 'Male',
-          location: 'Boston, MA',
-          distance: '15 miles',
-          image: '/images/parrot.png',
-        },
-        {
-          name: 'Hopper',
-          breed: 'Bunny',
-          age: '1 year',
-          gender: 'Male',
-          location: 'Providence, RI',
-          distance: '12 miles',
-          image: '/images/bunny.png',
-        },
-        {
-          name: 'Shelly',
-          breed: 'Turtle',
-          age: '5 years',
-          gender: 'Female',
-          location: 'Springfield, MA',
-          distance: '20 miles',
-          image: '/images/turtle.png',
-        },
-        {
-          name: 'Buddy',
-          breed: 'Golden Retriever',
-          age: '4 years',
-          gender: 'Male',
-          location: 'Bridgeport, CT',
-          distance: '7 miles',
-          image: '/images/golden-retriever.png',
-        },
-        {
-          name: 'Luna',
-          breed: 'Cat',
-          age: '2 years',
-          gender: 'Female',
-          location: 'Albany, NY',
-          distance: '25 miles',
-          image: '/images/kitten.png',
-        },
-        {
-          name: 'Charlie',
-          breed: 'Dog',
-          age: '3 years',
-          gender: 'Male',
-          location: 'Stamford, CT',
-          distance: '9 miles',
-          image: '/images/husky.png',
-        },
-        // Add more pets as needed
-      ]);
-    }, 500);
-  }, [distance, zipCode, includeShippable, minAge, maxAge, petTypes, color, size]);
-
   // Handle Enter Key Press in Search Input
-  const handleKeyPress = (e) => {
+  const handleKeyPress = e => {
     if (e.key === 'Enter') {
       handleSearch();
     }
@@ -184,7 +193,7 @@ function SearchResults() {
             placeholder="Search for pets..."
             className="search-input"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
           />
           <button className="search-button" onClick={handleSearch}>
@@ -198,7 +207,7 @@ function SearchResults() {
         <div className="main-content">
           {/* Filter Panel */}
           <div className="filter-panel">
-            <h3>{searchResults.length} matches</h3>
+            <h3>{searchResults.length} {searchResults.length === 1 ? 'match' : 'matches'}</h3>
             {/* Applied Filters */}
             <div className="applied-filters">
               {getAppliedFilters().map((filter, index) => (
@@ -212,197 +221,130 @@ function SearchResults() {
             </div>
             {/* Filters */}
             <div className="filters">
+              {/* Distance Filter */}
               <label>Distance:</label>
-              <select
-                value={distance}
-                onChange={(e) => setDistance(e.target.value)}
-              >
+              <select value={distance} onChange={e => setDistance(e.target.value)}>
                 <option value="10">10 miles</option>
                 <option value="20">20 miles</option>
                 <option value="30">30 miles</option>
                 <option value="50">50 miles</option>
                 <option value="100">100 miles</option>
               </select>
+
+              {/* ZIP Code Filter */}
               <input
                 type="text"
                 placeholder="ZIP Code"
                 value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
+                onChange={e => setZipCode(e.target.value)}
               />
 
+              {/* Include Shippable Pets Filter */}
               <label>
                 <input
                   type="checkbox"
                   checked={includeShippable}
-                  onChange={(e) => setIncludeShippable(e.target.checked)}
+                  onChange={e => setIncludeShippable(e.target.checked)}
                 />
                 Include Shippable Pets
               </label>
 
+              {/* Age Range Filter */}
               <label>Age Range:</label>
-              <select
-                value={minAge}
-                onChange={(e) => setMinAge(e.target.value)}
-              >
-                <option value="">Min Age</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                {/* Add more options */}
-              </select>
-              <select
-                value={maxAge}
-                onChange={(e) => setMaxAge(e.target.value)}
-              >
-                <option value="">Max Age</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                {/* Add more options */}
-              </select>
-
-              <label>Pet Type:</label>
-              <div className="pet-types">
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Cat"
-                    checked={petTypes.includes('Cat')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setPetTypes((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((type) => type !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Cat
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Parrot"
-                    checked={petTypes.includes('Parrot')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setPetTypes((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((type) => type !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Parrot
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Dog"
-                    checked={petTypes.includes('Dog')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setPetTypes((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((type) => type !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Dog
-                </label>
-                {/* Add more pet types */}
+              <div className="age-range">
+                <select value={minAge} onChange={e => setMinAge(e.target.value)}>
+                  <option value="">Min Age</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  {/* Add more options as needed */}
+                </select>
+                <select value={maxAge} onChange={e => setMaxAge(e.target.value)}>
+                  <option value="">Max Age</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  {/* Add more options as needed */}
+                </select>
               </div>
 
-              {/* Additional Categories */}
-              <label>Color:</label>
-              <div className="colors">
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Black"
-                    checked={color.includes('Black')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setColor((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((col) => col !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Black
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    value="White"
-                    checked={color.includes('White')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setColor((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((col) => col !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  White
-                </label>
-                {/* Add more colors */}
-              </div>
+              {/* Pet Type Filter */}
+              {availablePetTypes.length > 0 && (
+                <>
+                  <label>Pet Type:</label>
+                  <div className="pet-types">
+                    {availablePetTypes.map(type => (
+                      <label key={type}>
+                        <input
+                          type="checkbox"
+                          value={type}
+                          checked={petTypes.includes(type)}
+                          onChange={e => {
+                            const value = e.target.value;
+                            setPetTypes(prev =>
+                              prev.includes(value) ? prev.filter(t => t !== value) : [...prev, value]
+                            );
+                          }}
+                        />
+                        {type}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
 
-              <label>Size:</label>
-              <div className="sizes">
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Small"
-                    checked={size.includes('Small')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSize((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((s) => s !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Small
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Medium"
-                    checked={size.includes('Medium')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSize((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((s) => s !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Medium
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    value="Large"
-                    checked={size.includes('Large')}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSize((prev) =>
-                        prev.includes(value)
-                          ? prev.filter((s) => s !== value)
-                          : [...prev, value]
-                      );
-                    }}
-                  />
-                  Large
-                </label>
-              </div>
+              {/* Color Filter */}
+              {availableColors.length > 0 && (
+                <>
+                  <label>Color:</label>
+                  <div className="colors">
+                    {availableColors.map(col => (
+                      <label key={col}>
+                        <input
+                          type="checkbox"
+                          value={col}
+                          checked={color.includes(col)}
+                          onChange={e => {
+                            const value = e.target.value;
+                            setColor(prev =>
+                              prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
+                            );
+                          }}
+                        />
+                        {col}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Size Filter */}
+              {availableSizes.length > 0 && (
+                <>
+                  <label>Size:</label>
+                  <div className="sizes">
+                    {availableSizes.map(s => (
+                      <label key={s}>
+                        <input
+                          type="checkbox"
+                          value={s}
+                          checked={size.includes(s)}
+                          onChange={e => {
+                            const value = e.target.value;
+                            setSize(prev =>
+                              prev.includes(value) ? prev.filter(sz => sz !== value) : [...prev, value]
+                            );
+                          }}
+                        />
+                        {s}
+                      </label>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -419,11 +361,17 @@ function SearchResults() {
                   <p><strong>Age:</strong> {pet.age}</p>
                   <p><strong>Gender:</strong> {pet.gender}</p>
                   <p><strong>Location:</strong> {pet.location}</p>
-                  <p><strong>Distance:</strong> {pet.distance}</p>
-                  <button className="adopt-button">Adopt me!</button>
+                  <p><strong>Distance:</strong> {pet.distance} miles</p>
+                  <button
+                    className="adopt-button"
+                    onClick={() => navigate(`/PetProfile/${pet.id}`)} // Navigate to the PetProfile page
+                  >
+                    Adopt me!
+                  </button>
                 </div>
               </div>
             ))}
+            {searchResults.length === 0 && <p>No pets match your criteria.</p>}
           </div>
         </div>
       </div>
