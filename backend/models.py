@@ -57,7 +57,7 @@ class Pet(db.Model):
     available_for_adoption = db.Column(db.Boolean, default=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     photo = db.Column(db.String(200), nullable=True)
-    about = db.Column(db.Text, nullable=True) 
+    about = db.Column(db.Text, nullable=True)
 
     def to_dict(self):
         """Converts the Pet object to a dictionary."""

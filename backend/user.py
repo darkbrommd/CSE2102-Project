@@ -1,14 +1,14 @@
 """User-related API endpoints for registration, login, profile management, and deletion."""
 
 import os
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flasgger import swag_from
 from backend.models import User
 from backend.db import db
 from backend.models import Pet
-from backend.config import PROFILE_UPLOAD_FOLDER, allowed_file  
+from backend.config import allowed_file
 
 user_bp = Blueprint('user', __name__)
 
@@ -21,7 +21,7 @@ def signup():
 
     # Get the data and optional file
     data = request.form
-    profile_picture = request.files.get('profile_picture')  # Use .get() to avoid KeyError if not provided
+    profile_picture = request.files.get('profile_picture')
 
     # Get user data
     username = data.get('username')
@@ -46,12 +46,14 @@ def signup():
     # Save profile picture if provided
     if profile_picture and allowed_file(profile_picture.filename):
         # Create profile-pictures directory if it doesn't exist
-        profile_picture_folder = os.path.join(os.getcwd(), 'frontend', 'public', 'images', 'profile-pictures')
+        profile_picture_folder = os.path.join(
+        os.getcwd(), 'frontend', 'public', 'images', 'profile-pictures'
+        )
         if not os.path.exists(profile_picture_folder):
             os.makedirs(profile_picture_folder)
 
         filename = secure_filename(profile_picture.filename)
-        file_path = os.path.join('images/profile-pictures', filename)  # Relative path for frontend access
+        file_path = os.path.join('images/profile-pictures', filename)
         absolute_path = os.path.join(profile_picture_folder, filename)
 
         # Save the file to the frontend directory
@@ -84,7 +86,7 @@ def login():
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
         # Create a JWT token with a JSON-serializable identity
-        token = create_access_token(identity=str(user.id))  # Use only the user ID as a string for now
+        token = create_access_token(identity=str(user.id))
 
         # Return token and user info
         return jsonify({
@@ -163,7 +165,7 @@ def remove_favorite():
         return jsonify({"message": "Pet removed from favorites", "favorites": user.favorites}), 200
 
     return jsonify({"message": "Pet not in favorites", "favorites": user.favorites}), 200
-    
+
 @user_bp.route('/get-favorites', methods=['GET'])
 @jwt_required()
 def get_favorites():
@@ -232,7 +234,10 @@ def change_profile():
         user.username = username
     if email:
         # Ensure email is valid and not already taken by another user
-        if '@' not in email or User.query.filter_by(email=email).filter(User.id != current_user_id).first():
+        if (
+            '@' not in email or 
+            User.query.filter_by(email=email).filter(User.id != current_user_id).first()
+        ):
             return jsonify({'error': 'Invalid or already registered email.'}), 400
         user.email = email
     if zip_code:
@@ -250,12 +255,14 @@ def change_profile():
     # Handle profile picture upload
     if profile_picture and allowed_file(profile_picture.filename):
         # Create profile-pictures directory if it doesn't exist
-        profile_picture_folder = os.path.join(os.getcwd(), 'frontend', 'public', 'images', 'profile-pictures')
+        profile_picture_folder = os.path.join(
+            os.getcwd(), 'frontend', 'public', 'images', 'profile-pictures'
+        )
         if not os.path.exists(profile_picture_folder):
             os.makedirs(profile_picture_folder)
 
         filename = secure_filename(profile_picture.filename)
-        file_path = os.path.join('images/profile-pictures', filename)  # Relative path for front-end access
+        file_path = os.path.join('images/profile-pictures', filename)
         absolute_path = os.path.join(profile_picture_folder, filename)
 
         # Save the file to the frontend directory
