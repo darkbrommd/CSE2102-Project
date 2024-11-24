@@ -29,58 +29,53 @@ def submit_application():
     if missing_fields:
         return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
-    # Extract data from request
-    user_id = get_jwt_identity()
-    pet_id = data['pet_id']
-    adopter_name = data['adopter_name']
-    address = data['address']
-    address2 = data.get('address2', '')  # Optional
-    zip_code = data['zip_code']
-    email = data['email']
-    phone_number = data['phone_number']
-    additional_comments = data.get('additional_comments', '')  # Optional
-    date_time = data['date_time']
-    duration = data['duration']  # Extract duration
-
     # Validate date_time format
     try:
-        datetime_obj = datetime.strptime(date_time, "%Y-%m-%d %H:%M:%S")
+        datetime_obj = datetime.strptime(data['date_time'], "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return jsonify({"error": "Invalid date_time format. Use 'YYYY-MM-DD HH:MM:SS'"}), 400
 
     # Check if the pet exists
-    pet = Pet.query.get(pet_id)
+    pet = Pet.query.get(data['pet_id'])
     if not pet:
         return jsonify({"error": "Pet not found"}), 404
 
     # Check if the user exists
+    user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Create a new Adoption instance
-    new_adoption = Adoption(
-        user_id=user_id,
-        pet_id=pet_id,
-        adopter_name=adopter_name,
-        address=address,
-        address2=address2,
-        zip_code=zip_code,
-        email=email,
-        phone_number=phone_number,
-        additional_comments=additional_comments,
-        date_adopted=datetime_obj,
-        duration=duration  # Save the duration
-    )
+    # Create a new Adoption instance using unpacked data
+    try:
+        new_adoption = Adoption(
+            **{
+                "user_id": user_id,
+                "pet_id": data['pet_id'],
+                "adopter_name": data['adopter_name'],
+                "address": data['address'],
+                "address2": data.get('address2', ''),  # Optional
+                "zip_code": data['zip_code'],
+                "email": data['email'],
+                "phone_number": data['phone_number'],
+                "additional_comments": data.get('additional_comments', ''),  # Optional
+                "date_adopted": datetime_obj,
+                "duration": data['duration']
+            }
+        )
 
-    # Save the adoption record to the database
-    db.session.add(new_adoption)
-    db.session.commit()
+        # Save the adoption record to the database
+        db.session.add(new_adoption)
+        db.session.commit()
 
-    return jsonify({
-        "message": "Adoption application submitted successfully!",
-        "adoption": new_adoption.to_dict()
-    }), 201
+        return jsonify({
+            "message": "Adoption application submitted successfully!",
+            "adoption": new_adoption.to_dict()
+        }), 201
+
+    except SQLAlchemyError as e:
+        print(f"Error saving adoption: {e}")
+        return jsonify({"error": "Failed to submit the adoption application."}), 500
 
 @adopt_bp.route('/my-adoptions', methods=['GET'])
 @jwt_required()
