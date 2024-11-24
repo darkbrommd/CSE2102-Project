@@ -11,35 +11,37 @@ import './MyApplications.css';
 function MyApplications() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate fetching applications from an API
-    setTimeout(() => {
-      // Replace this with your actual API call
-      const fetchedApplications = [
-        {
-          id: 1,
-          petName: 'Snowflake',
-          petBreed: 'Pomeranian',
-          status: 'Pending',
-          dateApplied: '2023-11-01',
-          image: '/images/bunny.png',
-        },
-        {
-          id: 2,
-          petName: 'Pumpkin',
-          petBreed: 'Cat',
-          status: 'Approved',
-          dateApplied: '2023-10-28',
-          image: '/images/kitten.png',
-        },
-        // Add more applications as needed
-      ];
+    const fetchApplications = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const token = localStorage.getItem('authToken'); // Ensure the user is authenticated
+        const response = await fetch('http://127.0.0.1:5000/my-adoptions', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      setApplications(fetchedApplications);
-      setLoading(false);
-    }, 1000);
+        if (response.ok) {
+          const data = await response.json();
+          setApplications(data.adoptions);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to fetch applications.');
+        }
+      } catch (err) {
+        console.error('Error fetching applications:', err);
+        setError('An error occurred while fetching your applications.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApplications();
   }, []);
 
   const handleApplicationClick = (applicationId) => {
@@ -66,7 +68,7 @@ function MyApplications() {
         {/* Main Content */}
         <div className="applications-main-content">
           {/* Breadcrumb Navigation */}
-          <Breadcrumb 
+          <Breadcrumb
             paths={[
               { name: 'My Adoption', url: '/my-applications' },
             ]}
@@ -75,6 +77,8 @@ function MyApplications() {
           {/* Applications List */}
           {loading ? (
             <p className="status-message">Loading applications...</p>
+          ) : error ? (
+            <p className="status-message error-message">{error}</p>
           ) : applications.length === 0 ? (
             <p className="status-message">No applications yet.</p>
           ) : (
@@ -86,12 +90,19 @@ function MyApplications() {
                   onClick={() => handleApplicationClick(app.id)}
                 >
                   <div className="application-card-content">
-                    <img src={app.image} alt={app.petName} className="pet-image" />
+                    <img
+                      src={app.petImage}
+                      alt={app.petName}
+                      className="pet-image"
+                    />
                     <div className="application-info">
                       <h2>{app.petName}</h2>
                       <p><strong>Breed:</strong> {app.petBreed}</p>
                       <p><strong>Status:</strong> {app.status}</p>
-                      <p><strong>Date Applied:</strong> {new Date(app.dateApplied).toLocaleDateString()}</p>
+                      <p>
+                        <strong>Date Applied:</strong>{' '}
+                        {new Date(app.dateAdopted).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
                 </div>

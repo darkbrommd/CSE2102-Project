@@ -1,9 +1,8 @@
-// src/pages/ChangeProfile.js
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header'; // Import the Header component
 import './ChangeProfile.css';
+import axios from 'axios';
 
 function ChangeProfile() {
   const navigate = useNavigate();
@@ -12,9 +11,9 @@ function ChangeProfile() {
   const [preview, setPreview] = useState(null);
 
   // State variables for form fields
-  const [username, setUsername] = useState(''); // You may want to pre-fill this with the current username
-  const [email, setEmail] = useState('');       // Pre-fill with current email
-  const [zipCode, setZipCode] = useState('');   // Pre-fill with current ZIP code
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [zipCode, setZipCode] = useState('');
 
   // Password fields
   const [currentPassword, setCurrentPassword] = useState('');
@@ -25,24 +24,38 @@ function ChangeProfile() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Allowed image types
-  const allowedImageTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-
-  // Simulate fetching current user data
+  // Fetch current user profile
   useEffect(() => {
-    // Here you would typically fetch user data from an API
-    // For demonstration, we'll use placeholder data
-    setUsername('Emily Chen');
-    setEmail('emily.chen@example.com');
-    setZipCode('06269');
-    setPreview('/images/user-profile-pic.jpg'); // Assuming this is the current profile picture
-  }, []);
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    // Fetch current user details
+    axios
+      .get('http://127.0.0.1:5000/get-profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const { name, profilePic, email, zipCode } = response.data;
+        setUsername(name);
+        setPreview(profilePic || '/images/default/default-profile-pic.png');
+        setEmail(email || '');
+        setZipCode(zipCode || '');
+      })
+      .catch((error) => {
+        console.error('Error fetching profile:', error);
+        setError('Failed to fetch user profile.');
+      });
+  }, [navigate]);
 
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
-      if (!allowedImageTypes.includes(file.type)) {
+      if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
         setError('Profile picture must be a PNG or JPG image.');
         setProfilePicture(null);
         setPreview(null);
@@ -50,8 +63,7 @@ function ChangeProfile() {
       }
 
       setProfilePicture(file);
-      setError(''); // Clear previous errors if any
-
+      setError(''); // Clear previous errors
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
@@ -62,110 +74,70 @@ function ChangeProfile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Reset any previous error or success messages
     setError('');
     setSuccess('');
 
-    // Initialize an array to collect error messages
     const validationErrors = [];
+    if (!username.trim()) validationErrors.push('Username cannot be empty.');
+    if (!email.includes('@')) validationErrors.push('Email must contain an "@" symbol.');
+    if (!/^\d{5}$/.test(zipCode)) validationErrors.push('ZIP Code must be exactly 5 digits.');
 
-    // Username validation
-    if (!username.trim()) {
-      validationErrors.push('Username cannot be empty.');
-    }
-
-    // Email validation
-    if (!email.includes('@')) {
-      validationErrors.push('Email must contain an "@" symbol.');
-    }
-
-    // ZIP code validation: exactly 5 digits
-    const zipCodeRegex = /^\d{5}$/;
-    if (!zipCodeRegex.test(zipCode)) {
-      validationErrors.push('ZIP Code must be exactly 5 digits.');
-    }
-
-    // Profile picture validation (if a picture is uploaded)
-    if (profilePicture && !allowedImageTypes.includes(profilePicture.type)) {
-      validationErrors.push('Profile picture must be a PNG or JPG image.');
-    }
-
-    // Password validations
     if (currentPassword || newPassword || confirmNewPassword) {
-      // If any password field is filled, all must be filled
-      if (!currentPassword) {
-        validationErrors.push('Current password is required to change your password.');
-      }
-      if (!newPassword) {
-        validationErrors.push('New password is required.');
-      }
-      if (!confirmNewPassword) {
-        validationErrors.push('Please confirm your new password.');
-      }
-      if (newPassword && confirmNewPassword && newPassword !== confirmNewPassword) {
-        validationErrors.push('New password and confirmation do not match.');
-      }
-      // Optional: Add more password strength validations here (e.g., minimum length)
-      if (newPassword && newPassword.length < 6) {
-        validationErrors.push('New password must be at least 6 characters long.');
-      }
+      if (!currentPassword) validationErrors.push('Current password is required to change your password.');
+      if (newPassword !== confirmNewPassword) validationErrors.push('Passwords do not match.');
     }
 
-    // If there are validation errors, display them and prevent form submission
     if (validationErrors.length > 0) {
-      setError(validationErrors.join('. '));
+      setError(validationErrors.join(' '));
       return;
     }
 
-    // Handle profile update logic here, e.g., form validation and API call
-    // This is a placeholder for demonstration purposes
-    console.log('Updating user profile...');
-    console.log({
-      username,
-      email,
-      zipCode,
-      profilePicture,
-      currentPassword,
-      newPassword,
-      confirmNewPassword,
-    });
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('zip_code', zipCode);
+    if (currentPassword) formData.append('current_password', currentPassword);
+    if (newPassword) formData.append('new_password', newPassword);
+    if (profilePicture) formData.append('profile_picture', profilePicture);
 
-    // Simulate successful profile update
-    setSuccess('Profile updated successfully!');
-    // Optionally, navigate back to the dashboard after a delay
-    setTimeout(() => {
-      navigate('/user-dashboard');
-    }, 2000);
+    const token = localStorage.getItem('authToken');
+    axios
+      .post('http://127.0.0.1:5000/change_profile', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        setSuccess(response.data.message || 'Profile updated successfully!');
+        setTimeout(() => {
+          navigate('/profile');
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error('Error updating profile:', error);
+        setError(error.response?.data?.error || 'Failed to update profile.');
+      });
   };
 
   return (
     <div className="change-profile-page">
       <Header /> {/* Use the Header component */}
-
-      {/* Background Image */}
       <div className="background-image">
-        {/* Change Profile Box */}
         <div className="change-profile-box">
           <h2>Update Your Profile</h2>
-
-          {/* Profile Section */}
           <div className="profile-section">
             <div className="profile-placeholder">
-              {preview ? (
-                <img
-                  src={preview}
-                  alt="Profile Preview"
-                  style={{
-                    borderRadius: '50%',
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              ) : (
-                <span>👤</span>
-              )}
+              <img
+                src={preview || '/images/default/default-profile-pic.png'}
+                alt="Profile Preview"
+                style={{
+                  borderRadius: '50%',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
             </div>
             <label htmlFor="profile-upload" className="upload-button">
               Click to Upload New Profile Picture
@@ -178,75 +150,46 @@ function ChangeProfile() {
               onChange={handleProfilePictureChange}
             />
           </div>
-
-          {/* Profile Update Form */}
           <form onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Update Username"
-              required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-
             <input
               type="email"
               placeholder="Update Email"
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-
             <input
               type="text"
               placeholder="Update Your ZIP Code"
-              required
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
             />
-
-            {/* Password Change Section */}
-            <div className="password-change-section">
-              <h3>Change Password</h3>
-              <input
-                type="password"
-                placeholder="Current Password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Confirm New Password"
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-              />
-            </div>
-
-            {/* Display error message if any */}
-            {error && (
-              <div className="error-message">
-                {error.split('. ').map((err, index) => (
-                  <p key={index}>
-                    {err.trim()}
-                    {index !== error.split('. ').length - 1 ? '.' : ''}
-                  </p>
-                ))}
-              </div>
-            )}
-
-            {/* Display success message if any */}
-            {success && (
-              <div className="success-message">
-                {success}
-              </div>
-            )}
-
+            <h3>Change Password</h3>
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Confirm New Password"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+            />
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
             <button type="submit">Update Profile</button>
           </form>
         </div>

@@ -1,7 +1,7 @@
 /* src/components/Slogan.css */
 .slogan {
   background-color: rgba(255, 255, 255, 0.4); /* Transparent white */
-  backdrop-filter: blur(10px); /* Apply blur effect */
+  /*backdrop-filter: blur(10px); /* Apply blur effect */
   color: #fff; /* White text for readability */
   text-align: center;
   padding: 50px 20px; /* Balanced padding */

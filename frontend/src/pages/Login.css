@@ -1,17 +1,17 @@
-/* src/pages/Login.css */
-
+/* General Page Styling */
 html, body, #root {
   height: 100%;
   margin: 0;
+  font-family: 'Helvetica Neue', sans-serif;
 }
 
 .login-page {
-  font-family: 'Helvetica Neue', sans-serif;
   color: #000;
   text-align: center;
   height: 100%;
 }
 
+/* Header Styling */
 .header {
   background-color: #39C5BB;
   padding: 10px;
@@ -20,10 +20,11 @@ html, body, #root {
 .logo {
   color: #fff;
   margin: 0;
-  text-decoration: none; /* Remove underline */
-  font-family: 'Helvetica Neue', sans-serif; /* Ensure consistent font */
+  text-decoration: none;
+  font-family: 'Helvetica Neue', sans-serif;
 }
 
+/* Background Image Styling */
 .background-image {
   background-image: url('/public/images/puppies-background.png');
   background-size: cover;
@@ -34,6 +35,7 @@ html, body, #root {
   justify-content: center;
 }
 
+/* Login Box Styling */
 .login-box {
   background-color: rgba(255, 255, 255, 0.85);
   padding: 30px;
@@ -48,6 +50,7 @@ html, body, #root {
   margin-bottom: 10px; /* Reduced margin to fix spacing */
 }
 
+/* Form Styling */
 .login-box form {
   display: flex;
   flex-direction: column;
@@ -58,7 +61,7 @@ html, body, #root {
   margin: 8px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px; /* Ensures consistent font size */
+  font-size: 16px;
 }
 
 .login-box input:focus {
@@ -75,13 +78,38 @@ html, body, #root {
   cursor: pointer;
   font-weight: bold;
   margin-top: 10px;
-  font-size: 16px; /* Ensures consistent font size */
+  font-size: 16px;
 }
 
 .login-box button[type='submit']:hover {
   background-color: #33b3aa;
 }
 
+/* Success Message Styling */
+.success-message {
+  background-color: #e6f4ea; /* Light green background */
+  color: #2e7d32; /* Dark green text */
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #b7dfb8; /* Light green border */
+}
+
+/* Error Message Styling */
+.error-message {
+  background-color: #fdecea; /* Light red background */
+  color: #d32f2f; /* Dark red text */
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #f5c6cb; /* Light red border */
+}
+
+/* Signup Button Styling */
 .signup-button {
   display: block;
   margin: 20px 0 10px;
@@ -91,20 +119,21 @@ html, body, #root {
   border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
-  font-size: 16px; /* Ensures consistent font size */
+  font-size: 16px;
 }
 
 .signup-button:hover {
   background-color: #33b3aa;
 }
 
+/* Google Sign-In Button Styling */
 .google-signin {
   background-color: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   margin-top: 20px;
-  display: block; /* Ensure it takes full width */
+  display: block;
   margin-left: auto;
   margin-right: auto;
 }
@@ -114,9 +143,10 @@ html, body, #root {
   height: auto;
 }
 
+/* Forgot Password Link Styling */
 .forgot-password {
-  display: block; /* Ensure it stacks below the Google button */
-  margin: 20px 0 0; /* Add some top margin */
+  display: block;
+  margin: 20px 0 0;
   color: #39C5BB;
   text-decoration: none;
   font-size: 0.9em;
@@ -124,4 +154,20 @@ html, body, #root {
 
 .forgot-password:hover {
   text-decoration: underline;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .login-box {
+    width: 90%; /* Adapt to smaller screen sizes */
+    padding: 20px;
+  }
+
+  .google-signin img {
+    width: 180px; /* Adjust size for mobile */
+  }
+
+  .signup-button, .forgot-password {
+    font-size: 14px; /* Reduce text size */
+  }
 }

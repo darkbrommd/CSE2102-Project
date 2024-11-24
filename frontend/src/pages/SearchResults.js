@@ -367,7 +367,7 @@ function SearchResults() {
             {searchResults.map((pet, index) => (
               <div key={index} className="animal-card">
                 <div className="animal-image-container">
-                  <img src={pet.image} alt={pet.name} />
+                <img src={`/${pet.photo || 'images/default/default-pet.png'}`} alt={pet.name} />
                 </div>
                 <div className="animal-info">
                   <h4>{pet.name}</h4>

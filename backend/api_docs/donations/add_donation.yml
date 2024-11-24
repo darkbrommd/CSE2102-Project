@@ -8,13 +8,65 @@ parameters:
     schema:
       type: object
       properties:
-        user:
+        name:
           type: string
-          example: "newuser"
-        amount:
+          example: "John Doe"
+        donationAmount:
           type: number
           format: float
-          example: 50.0
+          example: 100.0
+        frequency:
+          type: string
+          example: "Monthly"
+        email:
+          type: string
+          format: email
+          example: "johndoe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        cardNumber:
+          type: string
+          example: "4111111111111111"
+        expiry:
+          type: string
+          format: date
+          example: "2024-12"
+        cvv:
+          type: string
+          example: "123"
+        billingAddress:
+          type: string
+          example: "123 Main Street"
+        zipCode:
+          type: string
+          example: "12345"
+        dedication:
+          type: string
+          example: "In memory of someone special"
+        anonymous:
+          type: boolean
+          example: false
+        employer:
+          type: string
+          example: "Tech Corp"
+        subscribe:
+          type: boolean
+          example: true
+        consent:
+          type: boolean
+          example: true
+        taxReceipt:
+          type: boolean
+          example: true
+    required:
+      - name
+      - donationAmount
+      - frequency
+      - email
+      - cardNumber
+      - expiry
+      - cvv
 responses:
   201:
     description: Donation added successfully
@@ -32,12 +84,71 @@ responses:
               example: 1
             user:
               type: string
-              example: "newuser"
+              example: "John Doe"
             amount:
               type: number
               format: float
-              example: 50.0
-            date:
+              example: 100.0
+            frequency:
               type: string
-              format: date-time
-              example: "2024-11-05T22:31:22.000Z"
+              example: "Monthly"
+            email:
+              type: string
+              format: email
+              example: "johndoe@example.com"
+            phone:
+              type: string
+              example: "+1234567890"
+            card_number:
+              type: string
+              example: "4111111111111111"
+            expiry:
+              type: string
+              format: date
+              example: "2024-12"
+            cvv:
+              type: string
+              example: "123"
+            billing_address:
+              type: string
+              example: "123 Main Street"
+            zip_code:
+              type: string
+              example: "12345"
+            dedication:
+              type: string
+              example: "In memory of someone special"
+            anonymous:
+              type: boolean
+              example: false
+            employer:
+              type: string
+              example: "Tech Corp"
+            subscribe:
+              type: boolean
+              example: true
+            consent:
+              type: boolean
+              example: true
+            tax_receipt:
+              type: boolean
+              example: true
+  400:
+    description: Missing required fields
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Missing required fields: name, donationAmount"
+  500:
+    description: Server error occurred
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "An error occurred while processing your donation"
+        details:
+          type: string
+          example: "IntegrityError: UNIQUE constraint failed: Donation.email"

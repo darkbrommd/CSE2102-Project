@@ -1,4 +1,4 @@
-// src/pages/ApplicationDetail.js
+// src/pages/AdoptionDetail.js
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -8,52 +8,72 @@ import SidebarNavigation from '../components/SidebarNavigation';
 import Breadcrumb from '../components/Breadcrumb';
 import './ApplicationDetail.css';
 
-function ApplicationDetail() {
+function AdoptionDetail() {
   const { applicationId } = useParams();
-  const [application, setApplication] = useState(null);
+  const [adoption, setAdoption] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate fetching application details from an API
-    setTimeout(() => {
-      // Replace this with your actual API call using applicationId
-      const fetchedApplication = {
-        id: applicationId,
-        petName: 'Snowflake',
-        petBreed: 'Pomeranian',
-        status: 'Pending',
-        dateApplied: '2023-11-01',
-        image: '/images/bunny.png',
-        petAge: '2 years',
-        petGender: 'Female',
-        petDescription:
-          'A friendly and playful Pomeranian who loves to cuddle and play fetch.',
-        adopterName: 'Emily Chen',
-        adopterContact: 'emily.chen@example.com',
-        adopterAddress: '123 Main St, Storrs, CT 06269',
-        // Scheduled meeting details
-        meetingDate: '2023-11-15',
-        meetingTime: '14:00',
-        meetingDuration: '60', // in minutes
-        meetingStatus: 'Confirmed',
-      };
+    const fetchAdoptionDetail = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://127.0.0.1:5000/adoption/${applicationId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      setApplication(fetchedApplication);
-      setLoading(false);
-    }, 1000);
+        if (response.ok) {
+          const data = await response.json();
+          setAdoption(data.adoption);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.error || 'Failed to fetch adoption details.');
+        }
+      } catch (err) {
+        console.error('Error fetching adoption details:', err);
+        setError('An error occurred while fetching the adoption details.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdoptionDetail();
   }, [applicationId]);
 
-  // Function to handle rescheduling (placeholder)
-  const handleReschedule = () => {
-    // TODO: Implement reschedule functionality
-    alert('Reschedule functionality will be available soon.');
-  };
+  const handleCancelAdoption = async () => {
+    const confirmation = window.confirm(
+      'Are you sure you want to cancel this adoption? This action cannot be undone.'
+    );
+    if (!confirmation) return;
 
-  // Function to handle cancellation (placeholder)
-  const handleCancel = () => {
-    // TODO: Implement cancel functionality
-    alert('Cancel functionality will be available soon.');
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(
+        `http://127.0.0.1:5000/adoption/${applicationId}/cancel-adoption`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        alert('Adoption canceled successfully.');
+        navigate('/my-applications'); // Redirect user to the list of applications
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to cancel the adoption.');
+      }
+    } catch (error) {
+      console.error('Error canceling adoption:', error);
+      alert('An error occurred while canceling the adoption. Please try again.');
+    }
   };
 
   if (loading) {
@@ -64,14 +84,14 @@ function ApplicationDetail() {
         <div className="dashboard-content">
           <SidebarNavigation active="my-applications" />
           <div className="applications-main-content">
-            <p className="status-message">Loading application details...</p>
+            <p className="status-message">Loading adoption details...</p>
           </div>
         </div>
       </div>
     );
   }
 
-  if (!application) {
+  if (error) {
     return (
       <div className="application-detail-page">
         <Header />
@@ -79,7 +99,22 @@ function ApplicationDetail() {
         <div className="dashboard-content">
           <SidebarNavigation active="my-applications" />
           <div className="applications-main-content">
-            <p className="status-message">Application not found.</p>
+            <p className="status-message error-message">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!adoption) {
+    return (
+      <div className="application-detail-page">
+        <Header />
+        <Navbar />
+        <div className="dashboard-content">
+          <SidebarNavigation active="my-applications" />
+          <div className="applications-main-content">
+            <p className="status-message">Adoption not found.</p>
           </div>
         </div>
       </div>
@@ -91,98 +126,96 @@ function ApplicationDetail() {
       <Header />
       <Navbar />
 
-      {/* Welcome Banner */}
       <div className="welcome-banner">
         <div className="welcome-text">
-          <h1>Application Details</h1>
+          <h1>Adoption Details</h1>
         </div>
       </div>
 
       <div className="dashboard-content">
-        {/* Sidebar Navigation */}
         <SidebarNavigation active="my-applications" />
 
-        {/* Main Content */}
         <div className="applications-main-content">
-          {/* Breadcrumb Navigation */}
           <Breadcrumb
             paths={[
               { name: 'My Applications', url: '/my-applications' },
-              { name: application.petName },
+              { name: adoption.pet.name },
             ]}
           />
 
-          {/* Application Detail Card */}
           <div className="application-detail-card">
             <div className="application-card-content">
               <img
-                src={application.image}
-                alt={application.petName}
-                className="application-pet-image" /* Updated className */
+                src={
+                  adoption.pet.photo
+                    ? `/${adoption.pet.photo}` // Use the provided photo path
+                    : '/images/default/default-pet.png' // Use the fallback default image
+                }
+                alt={adoption.pet.name}
+                className="application-pet-image"
               />
               <div className="application-info">
-                <h2>{application.petName}</h2>
+                <h2>{adoption.pet.name}</h2>
                 <p>
-                  <strong>Breed:</strong> {application.petBreed}
+                  <strong>Breed:</strong> {adoption.pet.breed}
                 </p>
                 <p>
-                  <strong>Age:</strong> {application.petAge}
+                  <strong>Age:</strong> {adoption.pet.age || 'N/A'}
                 </p>
                 <p>
-                  <strong>Gender:</strong> {application.petGender}
+                  <strong>Gender:</strong> {adoption.pet.gender || 'N/A'}
                 </p>
                 <p>
-                  <strong>Description:</strong> {application.petDescription}
+                  <strong>Description:</strong> {adoption.pet.description || 'No details available.'}
                 </p>
                 <p>
-                  <strong>Status:</strong> {application.status}
+                  <strong>Status:</strong> {adoption.status}
                 </p>
                 <p>
-                  <strong>Date Applied:</strong>{' '}
-                  {new Date(application.dateApplied).toLocaleDateString()}
+                  <strong>Date Adopted:</strong>{' '}
+                  {new Date(adoption.date_adopted).toLocaleDateString()}
                 </p>
 
-                {/* Adopter Information */}
                 <h2>Adopter Information</h2>
                 <p>
-                  <strong>Name:</strong> {application.adopterName}
+                  <strong>Name:</strong> {adoption.adopter_name}
                 </p>
                 <p>
-                  <strong>Contact:</strong> {application.adopterContact}
+                  <strong>Contact:</strong> {adoption.adopter_contact}
                 </p>
                 <p>
-                  <strong>Address:</strong> {application.adopterAddress}
+                  <strong>Address:</strong> {adoption.adopter_address}
+                </p>
+                <p>
+                  <strong>Additional Comments:</strong> {adoption.additional_comments || 'N/A'}
                 </p>
 
-                {/* Scheduled Meeting Details */}
                 <h2>Scheduled Meeting</h2>
-                {application.meetingDate ? (
+                {adoption.meeting ? (
                   <>
                     <p>
                       <strong>Date:</strong>{' '}
-                      {new Date(application.meetingDate).toLocaleDateString()}
+                      {new Date(adoption.meeting.date).toLocaleDateString()}
                     </p>
                     <p>
-                      <strong>Time:</strong> {application.meetingTime}
+                      <strong>Time:</strong> {adoption.meeting.time}
                     </p>
                     <p>
-                      <strong>Duration:</strong> {application.meetingDuration} minutes
+                      <strong>Duration:</strong> {adoption.meeting.duration} minutes
                     </p>
                     <p>
-                      <strong>Status:</strong> {application.meetingStatus}
+                      <strong>Status:</strong> {adoption.meeting.status}
                     </p>
-                    <div className="meeting-actions">
-                      <button onClick={handleReschedule} className="reschedule-button">
-                        Reschedule
-                      </button>
-                      <button onClick={handleCancel} className="cancel-button">
-                        Cancel Meeting
-                      </button>
-                    </div>
                   </>
                 ) : (
                   <p>No meeting scheduled yet.</p>
                 )}
+
+                <div className="meeting-actions">
+                  <button onClick={handleCancelAdoption} className="cancel-button">
+                    Cancel Adoption
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -192,4 +225,4 @@ function ApplicationDetail() {
   );
 }
 
-export default ApplicationDetail;
+export default AdoptionDetail;
