@@ -9,6 +9,8 @@ This module contains unit tests
 """
 
 # pylint: disable=redefined-outer-name
+# pylint: disable=duplicate-code
+
 import hashlib
 import pytest
 from flask import Flask
