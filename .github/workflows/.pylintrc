@@ -96,7 +96,7 @@ disable=
     trailing-whitespace,
     unused-import,
     line-too-long,
-    too-many-branches
+    too-many-branches,
     R0801
 
 
