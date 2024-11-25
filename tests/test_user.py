@@ -28,7 +28,7 @@ def client():
     app.config["PROFILE_PICTURE_FOLDER"] = "test_profile_pictures"
 
     db.init_app(app)
-    jwt = JWTManager(app)
+    JWTManager(app)  # Initialize without assigning to a variable
     app.register_blueprint(user_bp)
 
     with app.app_context():
