@@ -3,12 +3,14 @@ Adoption API module for handling pet adoptions.
 Provides endpoints for viewing adoptable pets, applying for adoption,
 checking adoption status, and canceling adoptions.
 """
+from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flasgger import swag_from
 from backend.models import User, Pet, Adoption
 from backend.db import db
-from datetime import datetime
+
 
 adopt_bp = Blueprint('adopt', __name__)
 
@@ -27,55 +29,53 @@ def submit_application():
     if missing_fields:
         return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
-    # Extract data from request
-    user_id = get_jwt_identity()
-    pet_id = data['pet_id']
-    adopter_name = data['adopter_name']
-    address = data['address']
-    address2 = data.get('address2', '')  # Optional
-    zip_code = data['zip_code']
-    email = data['email']
-    phone_number = data['phone_number']
-    additional_comments = data.get('additional_comments', '')  # Optional
-    date_time = data['date_time']
-    duration = data['duration']  # Extract duration
-
     # Validate date_time format
     try:
-        datetime_obj = datetime.strptime(date_time, "%Y-%m-%d %H:%M:%S")
+        datetime_obj = datetime.strptime(data['date_time'], "%Y-%m-%d %H:%M:%S")
     except ValueError:
         return jsonify({"error": "Invalid date_time format. Use 'YYYY-MM-DD HH:MM:SS'"}), 400
 
     # Check if the pet exists
-    pet = Pet.query.get(pet_id)
+    pet = Pet.query.get(data['pet_id'])
     if not pet:
         return jsonify({"error": "Pet not found"}), 404
 
     # Check if the user exists
+    user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Create a new Adoption instance
-    new_adoption = Adoption(
-        user_id=user_id,
-        pet_id=pet_id,
-        adopter_name=adopter_name,
-        address=address,
-        address2=address2,
-        zip_code=zip_code,
-        email=email,
-        phone_number=phone_number,
-        additional_comments=additional_comments,
-        date_adopted=datetime_obj,
-        duration=duration  # Save the duration
-    )
+    # Create a new Adoption instance using unpacked data
+    try:
+        new_adoption = Adoption(
+            **{
+                "user_id": user_id,
+                "pet_id": data['pet_id'],
+                "adopter_name": data['adopter_name'],
+                "address": data['address'],
+                "address2": data.get('address2', ''),  # Optional
+                "zip_code": data['zip_code'],
+                "email": data['email'],
+                "phone_number": data['phone_number'],
+                "additional_comments": data.get('additional_comments', ''),  # Optional
+                "date_adopted": datetime_obj,
+                "duration": data['duration']
+            }
+        )
 
-    # Save the adoption record to the database
-    db.session.add(new_adoption)
-    db.session.commit()
+        # Save the adoption record to the database
+        db.session.add(new_adoption)
+        db.session.commit()
 
-    return jsonify({"message": "Adoption application submitted successfully!", "adoption": new_adoption.to_dict()}), 201
+        return jsonify({
+            "message": "Adoption application submitted successfully!",
+            "adoption": new_adoption.to_dict()
+        }), 201
+
+    except SQLAlchemyError as e:
+        print(f"Error saving adoption: {e}")
+        return jsonify({"error": "Failed to submit the adoption application."}), 500
 
 @adopt_bp.route('/my-adoptions', methods=['GET'])
 @jwt_required()
@@ -109,7 +109,7 @@ def get_user_adoptions():
 
         return jsonify({"adoptions": response_data}), 200
 
-    except Exception as e:
+    except SQLAlchemyError as e:
         print(f"Error fetching adoptions: {e}")
         return jsonify({"error": "Failed to fetch adoptions."}), 500
 
@@ -151,19 +151,19 @@ def get_adoption_details(adoption_id):
                 "photo": pet.photo if pet.photo else "/images/default/default-pet.png",
             },
             "meeting": {
-                "date": adoption.date_adopted.isoformat().split("T")[0],  # Replace with actual meeting date if applicable
-                "time": adoption.date_adopted.isoformat().split("T")[1],  # Replace with actual meeting time if applicable
+                "date": adoption.date_adopted.isoformat().split("T")[0],
+                "time": adoption.date_adopted.isoformat().split("T")[1],
                 "duration": adoption.duration,
-                "status": "Confirmed",  # Replace with actual meeting status if applicable
+                "status": "Confirmed",
             },
         }
 
         return jsonify({"adoption": response_data}), 200
 
-    except Exception as e:
+    except SQLAlchemyError as e:
         print(f"Error fetching adoption details: {e}")
         return jsonify({"error": "Failed to fetch adoption details."}), 500
-    
+
 @adopt_bp.route('/adoption/<int:adoption_id>/cancel-adoption', methods=['DELETE'])
 @jwt_required()
 def cancel_adoption(adoption_id):
@@ -182,7 +182,7 @@ def cancel_adoption(adoption_id):
         db.session.commit()
 
         return jsonify({"message": "Adoption canceled successfully!"}), 200
-    except Exception as e:
+    except SQLAlchemyError as e:
         print(f"Error canceling adoption: {e}")
         return jsonify({"error": "Failed to cancel the adoption."}), 500
 
@@ -234,4 +234,3 @@ def get_adoption_status(pet_id):
 
     status = "Available" if pet.available_for_adoption else "Adopted"
     return jsonify({"pet_id": pet.id, "name": pet.name, "status": status}), 200
-
