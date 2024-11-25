@@ -4,17 +4,17 @@ Sets up the Flask app, initializes database, and configures API endpoints and er
 """
 import os
 from flask import Flask, jsonify
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flasgger import Swagger
-from db import db
-from user import user_bp
-from pets import pets_bp
-from adopt import adopt_bp
-from donate import donation_bp
-from schedule import schedule_bp
-from search import search_bp
-
-
+from backend.db import db
+from backend.user import user_bp
+from backend.pets import pets_bp
+from backend.adopt import adopt_bp
+from backend.donate import donation_bp
+from backend.schedule import schedule_bp
+from backend.search import search_bp
+from backend.config import PROFILE_UPLOAD_FOLDER, MAX_CONTENT_LENGTH
 
 app = Flask(__name__, static_url_path='/public', static_folder='public')
 swagger = Swagger(app)
@@ -25,18 +25,22 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
     'sqlite:///' + os.path.join(basedir, 'instance', 'database.db')
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config['JWT_SECRET_KEY'] = 'e2a8c0f5d923f14d23b8edb1c6bfe3b5b85e7edc6d8c28e7f2f3b4a15f19e7c4'
+app.config.from_object('backend.config')
 # Initialize the database
 db.init_app(app)
-
+jwt = JWTManager(app)
 # Enable CORS
-CORS(app)
+CORS(app, origins=["http://localhost:3000"], supports_credentials=True)  
+@app.route('/')
+def home():
+    return "Welcome to the API!"
 
 # File upload configuration
-app.config['PROFILE_UPLOAD_FOLDER'] = 'public/profile_pictures'  # Folder for user profile pictures
-app.config['PET_UPLOAD_FOLDER'] = 'public/pet_photos'            # Folder for pet photos
+app.config['PROFILE_UPLOAD_FOLDER'] = 'public/images/profile-pictures'  # Folder for user profile pictures
+app.config['PET_UPLOAD_FOLDER'] = 'public/images/pets'            # Folder for pet photos
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024              # Set max upload size to 16 MB
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # Allowed extensions
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'} # Allowed extensions
 
 def allowed_file(_filename):
     """

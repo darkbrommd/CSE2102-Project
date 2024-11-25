@@ -1,40 +1,119 @@
-/* src/components/Header.css */
-
+/* Header styles */
 .header {
-  background-color: #39C5BB; /* Light blue */
+  background-color: #39C5BB;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px; /* Adds padding on left and right sides of the header */
+  padding: 0 20px;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
 }
 
 .logo-link {
-  text-decoration: none; /* Remove underline from the Link */
+  text-decoration: none;
 }
 
 .logo {
   color: white;
-  font-size: 1.7em; /* Consistent font size */
-  font-weight: 700; /* Makes the text bold */
-  margin-right: 40px; /* Adds space to the right of 'HuskyAdoption' */
-  font-family: 'Helvetica Neue', sans-serif; /* Ensure consistent font */
+  font-size: 1.7em;
+  font-weight: 700;
+  font-family: 'Helvetica Neue', sans-serif;
 }
 
-.sign-in {
+/* User Info container */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.user-info:hover {
+  transform: translateX(-5px);
+}
+
+/* Profile picture */
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-pic:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Username */
+.user-name {
   color: white;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: 'Helvetica Neue', sans-serif;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.user-name:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Logout button */
+.logout-button {
+  background-color: white;
+  color: #39C5BB;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.8;
+}
+
+.logout-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+/* Sign In button */
+.sign-in-button {
+  background-color: white;
+  color: #39C5BB;
+  border: 2px solid #39C5BB;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: uppercase;
   text-decoration: none;
-  margin-left: 40px; /* Adds space to the left of 'Sign In' */
-  font-family: 'Helvetica Neue', sans-serif; /* Ensure consistent font */
-  font-weight: 400; /* Normal font weight */
-  font-size: 1em; /* Consistent font size */
+  font-family: 'Helvetica Neue', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Optional: Add hover effects to the logo */
-.logo-link:hover .logo {
-  color: #e0e0e0; /* Slight color change on hover */
+.sign-in-button:hover {
+  background-color: #39C5BB;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Optional: Add hover effects to the sign-in link */
-.sign-in:hover {
-  text-decoration: underline;
+.sign-in-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(57, 197, 187, 0.4);
+}
+
+.sign-in-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

@@ -1,0 +1,32 @@
+tags:
+  - Donation
+summary: Retrieve recent donations from the database
+parameters:
+  - name: limit
+    in: query
+    description: Number of recent donations to retrieve (default is 5)
+    required: false
+    type: integer
+    example: 5
+responses:
+  200:
+    description: A list of recent donations
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          user:
+            type: string
+            example: "donor1"
+          amount:
+            type: number
+            format: float
+            example: 100.0
+          date:
+            type: string
+            format: date-time
+            example: "2024-11-05T22:31:22.000Z"
