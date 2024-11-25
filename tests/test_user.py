@@ -1,3 +1,12 @@
+"""
+Test suite for the User API.
+
+This module contains unit tests for the User API, including:
+- Setting up a test client with a temporary database
+- Seeding initial test data
+- Testing various endpoints and functionalities of the User API
+"""
+
 # tests/test_user.py
 
 import os

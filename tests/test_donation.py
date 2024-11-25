@@ -1,3 +1,11 @@
+"""
+Test suite for Donation API.
+
+This module contains unit tests for the following endpoints:
+- Adding a new donation
+- Fetching recent donations
+"""
+
 import pytest
 from flask import Flask
 from backend.models import Donation
@@ -5,9 +13,11 @@ from backend.db import db
 from backend.donate import donation_bp
 
 @pytest.fixture
-def client():
+def test_client():
     """
     Set up a test client for the Flask application with a temporary in-memory database.
+    Yields:
+        Flask test client
     """
     app = Flask(__name__)
     app.config["TESTING"] = True
@@ -58,9 +68,10 @@ def client():
         db.session.commit()
 
     with app.test_client() as client:
-        yield client
+        yield client  # Renamed to avoid name conflict
 
-def test_add_donation_success(client):
+
+def test_add_donation_success(test_client):
     """
     Test adding a new donation successfully.
     Asserts:
@@ -85,14 +96,15 @@ def test_add_donation_success(client):
         "consent": True,
         "taxReceipt": True
     }
-    response = client.post("/add_donation", json=payload)
+    response = test_client.post("/add_donation", json=payload)
     assert response.status_code == 201
     data = response.get_json()
     assert data["message"] == "Donation added successfully"
     assert data["donation"]["user"] == "Alice Johnson"
     assert data["donation"]["amount"] == 200.00
 
-def test_add_donation_missing_fields(client):
+
+def test_add_donation_missing_fields(test_client):
     """
     Test adding a donation with missing required fields.
     Asserts:
@@ -105,7 +117,7 @@ def test_add_donation_missing_fields(client):
         "email": "bob@example.com"
         # Missing required fields
     }
-    response = client.post("/add_donation", json=payload)
+    response = test_client.post("/add_donation", json=payload)
     assert response.status_code == 400
     data = response.get_json()
     assert "Missing required fields" in data["error"]

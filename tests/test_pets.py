@@ -1,9 +1,17 @@
+"""
+Test suite for the Pets API.
+
+This module contains unit tests for the Pets API, including:
+- Setting up a test client with a temporary database
+- Seeding initial test data
+- Testing various endpoints and functionalities of the Pets API
+"""
+
 # tests/test_pets.py
 
 import os
 import pytest
 from flask import Flask
-from werkzeug.datastructures import FileStorage
 from backend.main import db
 from backend.models import Pet
 from backend.pets import pets_bp
@@ -67,4 +75,3 @@ def test_delete_pet(client):
     response = client.delete("/delete_pet/1")
     assert response.status_code == 404
     assert response.get_json()["error"] == "Pet not found"
-    
