@@ -12,7 +12,7 @@
 https://trello.com/b/pvWsZoYV/group-6-scrum-board
 
 ## Figma Prototype
-https://www.figma.com/design/CXFVGp0xjA3qPiNXCHrSzu/Pet-Adoption-Website
+[https://www.figma.com/design/CXFVGp0xjA3qPiNXCHrSzu/Pet-Adoption-Website](https://www.figma.com/design/1bcRqPeHS5d83vVffy2Wqg/Pet-Adoption-Website-Final?node-id=44-2&t=d5I1eijwVOoCc3h9-1)
 
 ## Preview
 https://share.cleanshot.com/NjfkH8WY
