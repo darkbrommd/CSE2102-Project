@@ -1,3 +1,13 @@
+"""
+Test suite for the Adoption API.
+
+This module contains unit tests
+- Retrieving adoptable pets
+- Submitting adoption applications
+- Checking the adoption status of pets
+- Canceling adoptions
+"""
+
 # pylint: disable=redefined-outer-name
 import hashlib
 import pytest
@@ -9,12 +19,29 @@ from backend.adopt import adopt_bp
 
 # Helper function to create a test user
 def create_test_user():
+    """
+    Create a mock user for testing purposes.
+
+    Returns:
+        User: A mock user object with predefined attributes.
+    """
     password_hash = hashlib.sha256("dummy_password".encode()).hexdigest()
-    return User(id=1, username="testuser", email="testuser@example.com", password_hash=password_hash)
+    return User(
+        id=1,
+        username="testuser",
+        email="testuser@example.com",
+        password_hash=password_hash
+    )
 
 
 # Helper function to create test pets
 def create_test_pets():
+    """
+    Create mock pets for testing purposes.
+
+    Returns:
+        list: A list of mock pet objects with predefined attributes.
+    """
     return [
         Pet(id=1, name="Fluffy", species="Cat", available_for_adoption=True),
         Pet(id=2, name="Spike", species="Dog", available_for_adoption=False),
@@ -23,6 +50,12 @@ def create_test_pets():
 
 @pytest.fixture
 def client():
+    """
+    Set up a test client for the Flask application with a temporary in-memory database.
+
+    Yields:
+        FlaskClient: A test client for the Flask application.
+    """
     app = Flask(__name__)
     app.config["TESTING"] = True
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
@@ -43,30 +76,65 @@ def client():
 
 
 def test_get_adoptable_pets(client):
+    """
+    Test retrieving all pets available for adoption.
+
+    Asserts:
+        - The response status code is 200.
+        - The pet "Fluffy" is present in the response.
+    """
     response = client.get("/adopt/applications")
     assert response.status_code == 200
     assert any(pet["name"] == "Fluffy" for pet in response.get_json())
 
 
 def test_apply_for_adoption(client):
+    """
+    Test submitting an adoption application for an available pet.
+
+    Asserts:
+        - The response status code is 201.
+        - The success message is included in the response.
+    """
     response = client.post("/adopt/1", json={"user_id": 1})
     assert response.status_code == 201
     assert "Adoption application submitted successfully" in response.get_json()["message"]
 
 
 def test_apply_for_nonexistent_pet(client):
+    """
+    Test submitting an adoption application for a nonexistent pet.
+
+    Asserts:
+        - The response status code is 404.
+        - The error message indicates the pet is not found.
+    """
     response = client.post("/adopt/999", json={"user_id": 1})
     assert response.status_code == 404
     assert response.get_json()["error"] == "Pet not found"
 
 
 def test_apply_for_already_adopted_pet(client):
+    """
+    Test submitting an adoption application for an already adopted pet.
+
+    Asserts:
+        - The response status code is 400.
+        - The error message indicates the pet is already adopted.
+    """
     response = client.post("/adopt/2", json={"user_id": 1})
     assert response.status_code == 400
     assert response.get_json()["error"] == "Pet is already adopted"
 
 
 def test_get_adoption_status(client):
+    """
+    Test retrieving the adoption status of a pet.
+
+    Asserts:
+        - The response status code is 200.
+        - The status of the pet is correctly updated after adoption.
+    """
     response = client.get("/adopt/status/1")
     assert response.status_code == 200
     assert response.get_json()["status"] == "Available"
@@ -77,12 +145,26 @@ def test_get_adoption_status(client):
 
 
 def test_get_adoption_status_for_nonexistent_pet(client):
+    """
+    Test retrieving the adoption status of a nonexistent pet.
+
+    Asserts:
+        - The response status code is 404.
+        - The error message indicates the pet is not found.
+    """
     response = client.get("/adopt/status/999")
     assert response.status_code == 404
     assert response.get_json()["error"] == "Pet not found"
 
 
 def test_cancel_adoption(client):
+    """
+    Test canceling an adoption for an adopted pet.
+
+    Asserts:
+        - The response status code is 200.
+        - The success message indicates the adoption was canceled.
+    """
     client.post("/adopt/1", json={"user_id": 1})
     response = client.post("/adopt/cancel/1")
     assert response.status_code == 200
@@ -90,12 +172,26 @@ def test_cancel_adoption(client):
 
 
 def test_cancel_adoption_for_nonexistent_pet(client):
+    """
+    Test canceling an adoption for a nonexistent pet.
+
+    Asserts:
+        - The response status code is 404.
+        - The error message indicates the pet is not found.
+    """
     response = client.post("/adopt/cancel/999")
     assert response.status_code == 404
     assert response.get_json()["error"] == "Pet not found"
 
 
 def test_cancel_adoption_for_available_pet(client):
+    """
+    Test canceling an adoption for a pet that is available for adoption.
+
+    Asserts:
+        - The response status code is 400.
+        - The error message indicates the pet is already available for adoption.
+    """
     response = client.post("/adopt/cancel/1")
     assert response.status_code == 400
     assert response.get_json()["error"] == "Pet is already available for adoption"
