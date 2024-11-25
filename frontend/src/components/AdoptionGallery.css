@@ -1,14 +1,24 @@
-/* src/components/AdoptionGallery.css */
-
 .adoption-gallery {
   text-align: center;
-  padding: 30px;
+  margin: 40px auto;
+  max-width: 900px; /* Increased width to accommodate 3 pet cards */
 }
 
 .adoption-gallery h3 {
-  color: #0000FF;
   font-size: 2em;
+  color: #007bff;
   margin-bottom: 20px;
+  position: relative;
+}
+
+.adoption-gallery h3::after {
+  content: '';
+  width: 60px;
+  height: 4px;
+  background: #007bff;
+  display: block;
+  margin: 10px auto 0;
+  border-radius: 2px;
 }
 
 .gallery-container {
@@ -18,30 +28,52 @@
 }
 
 .arrow-button {
-  background: none;
+  background: #007bff; /* Blue background for visibility */
   border: none;
-  padding: 0;
-  margin: 0 10px;
   cursor: pointer;
+  padding: 10px;
+  border-radius: 50%; /* Circular button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for a 3D effect */
+  transition: transform 0.2s, background-color 0.2s;
 }
 
 .arrow-button:disabled {
+  opacity: 0.5; /* Slightly transparent when disabled */
   cursor: not-allowed;
-  opacity: 0.5;
+}
+
+.arrow-button:not(:disabled):hover {
+  transform: scale(1.1); /* Enlarge the button slightly on hover */
+  background: #0056b3; /* Darker blue on hover */
 }
 
 .arrow {
-  width: 30px;
-  height: 30px;
-  transition: transform 0.2s;
-}
-
-.arrow-button:not(:disabled) .arrow:hover {
-  transform: scale(1.1);
+  width: 20px; /* Adjusted size for better visibility */
+  height: 20px;
+  filter: invert(100%); /* Invert the color to make it white */
 }
 
 .gallery {
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* Space between pet cards */
+  flex-wrap: nowrap;
   overflow: hidden;
+  width: 700px; /* Adjusted width for better alignment */
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .arrow-button {
+    display: none;
+  }
 }

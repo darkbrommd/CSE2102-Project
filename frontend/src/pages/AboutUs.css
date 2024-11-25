@@ -1,0 +1,170 @@
+/* Reset */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* About Us Page */
+  .about-us-page {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(to right, #007bff, #00aaff);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+  }
+  
+  .hero-section h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+  
+  .hero-section p {
+    font-size: 1.2em;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  /* Mission and Vision Section */
+  .mission-vision-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background: #f3f4f6;
+    padding: 60px 20px;
+  }
+  
+  .mission,
+  .vision {
+    width: 45%;
+    margin: 20px 0;
+  }
+  
+  .mission h2,
+  .vision h2 {
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  /* Values Section */
+  .values-section {
+    text-align: center;
+    background: white;
+    padding: 60px 20px;
+  }
+  
+  .values-section h2 {
+    font-size: 2.5em;
+    color: #007bff;
+    margin-bottom: 40px;
+  }
+  
+  .values-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .value-card {
+    background: #f9f9f9;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .value-card img {
+    width: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .value-card h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  /* Team Section */
+  .team-section {
+    background: #f3f4f6;
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .team-member {
+    text-align: center;
+    width: 200px;
+  }
+  
+  .team-member img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  /* Testimonials Section */
+  .testimonials-section {
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .testimonial-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .testimonial-card {
+    background: #f9f9f9;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .testimonial-card h4 {
+    margin-top: 15px;
+    color: #007bff;
+  }
+  
+  /* Call to Action Section */
+  .cta-section {
+    background: linear-gradient(to right, #007bff, #00aaff);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+  
+  .cta-section button {
+    background: white;
+    color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cta-section button:hover {
+    background: #e0e0e0;
+  }

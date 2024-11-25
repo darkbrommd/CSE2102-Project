@@ -57,10 +57,21 @@ def add_pet():
 
 @pets_bp.route('/pets/<int:pet_id>', methods=['GET'])
 def get_pet_by_id(pet_id):
-    """Fetch pet details by ID from the database."""
+    """Fetch pet details by ID."""
     pet = Pet.query.get(pet_id)
     if pet:
-        return jsonify(pet.to_dict()), 200
+        # Update the `photo` field to return the frontend-relative path
+        return jsonify({
+            "id": pet.id,
+            "name": pet.name,
+            "breed": pet.breed,
+            "age": pet.age,
+            "size": pet.size,
+            "location": pet.location,
+            "gender": pet.gender,
+            "photo": pet.photo or "public/images/default-pet.png",  # Default image
+            "about": pet.about,
+        }), 200
     return jsonify({"error": "Pet not found"}), 404
 
 @pets_bp.route('/update_pet/<int:pet_id>', methods=['PUT'])

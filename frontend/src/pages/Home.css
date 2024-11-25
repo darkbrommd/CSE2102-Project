@@ -1,0 +1,31 @@
+/* src/pages/Home.css */
+
+.home-page {
+    min-height: 100vh; /* Ensure the page covers the full viewport height */
+    background-image: url('/public/images/background.jpg'); /* Replace with your actual image name */
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    position: relative; /* Establish positioning context */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Optional: Overlay for better text readability */
+  .home-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent dark overlay */
+    z-index: -1; /* Ensure it sits behind all content */
+  }
+  
+  /* Ensure all direct children are above the overlay */
+  .home-page > * {
+    position: relative;
+    z-index: 1;
+  }
+  

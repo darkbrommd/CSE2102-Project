@@ -42,7 +42,7 @@ function RecentDonations() {
         </button>
 
         <div className="image-section">
-          <img src="https://via.placeholder.com/600x300" alt="Supporting Cause" className="support-image" />
+          <img src="/images/donation-dog.jpg" alt="Supporting Cause" className="support-image" />
           <p className="image-caption">Your generosity supports meaningful projects and life-changing initiatives.</p>
         </div>
 

@@ -1,0 +1,22 @@
+/* src/components/Breadcrumb.css */
+
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #555;
+  }
+  
+  .breadcrumb-link {
+    color: #007BFF;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-link:hover {
+    color: #0056b3;
+  }
+  
+  .breadcrumb-current {
+    color: #333;
+  }
+  

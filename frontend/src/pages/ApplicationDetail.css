@@ -1,0 +1,134 @@
+/* src/pages/ApplicationDetail.css */
+
+.application-detail-page {
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #000;
+}
+
+.dashboard-content {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.application-detail-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #f3f4f6;
+  min-height: 80vh;
+}
+
+.welcome-banner {
+  background-color: #f3f4f6;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.welcome-banner h1 {
+  font-size: 2.5em;
+  color: #007bff;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.application-detail-content h1 {
+  font-size: 2.5em;
+  color: #007bff;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.application-detail-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers content horizontally */
+  margin: 20px; /* Equal margin on all sides */
+  margin-top: -50px;
+}
+
+.application-pet-image { /* Renamed class */
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px; /* Keep it square with slightly rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: -430px; /* Move the image upward */
+  margin-left: -35px; /* Move the image slightly to the left */
+  margin-right: 35px;
+}
+
+.application-info {
+  max-width: 600px;
+  text-align: left;
+}
+
+.application-info h2 {
+  margin-top: 40px; /* Increased top margin for clarity */
+  margin-bottom: 15px;
+  font-size: 2em;
+  color: #333;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+.application-info p {
+  margin: 10px 0; /* Increased margin for better readability */
+  font-size: 1.2em;
+  color: #555;
+}
+
+.application-info p strong {
+  color: #333;
+}
+
+/* Optional: Add extra spacing before specific headings */
+.application-info p + h2 {
+  margin-top: 40px;
+}
+
+/* Meeting Actions */
+.meeting-actions {
+  margin-top: 20px;
+}
+
+.meeting-actions button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reschedule-button {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.reschedule-button:hover {
+  background-color: #e0a800;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+.status-message {
+  font-size: 1.5em;
+  color: #555;
+  text-align: center;
+  margin-top: 50px;
+}

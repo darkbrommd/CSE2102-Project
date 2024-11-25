@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.13d190c5.css",
+    "main.js": "/static/js/main.52edc283.js",
+    "static/js/453.89998d33.chunk.js": "/static/js/453.89998d33.chunk.js",
+    "static/media/background.jpg": "/static/media/background.04d901594e774eeabc2c.jpg",
+    "static/media/puppies-background.png": "/static/media/puppies-background.9fa838c12d58ca6900ee.png",
+    "index.html": "/index.html",
+    "main.13d190c5.css.map": "/static/css/main.13d190c5.css.map",
+    "main.52edc283.js.map": "/static/js/main.52edc283.js.map",
+    "453.89998d33.chunk.js.map": "/static/js/453.89998d33.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.13d190c5.css",
+    "static/js/main.52edc283.js"
+  ]
+}

@@ -1,16 +1,41 @@
 /* src/components/Slogan.css */
 .slogan {
-    background-color: #ADD8E6;
-    text-align: center;
-    padding: 30px;
+  background-color: rgba(255, 255, 255, 0.4); /* Transparent white */
+  /*backdrop-filter: blur(10px); /* Apply blur effect */
+  color: #fff; /* White text for readability */
+  text-align: center;
+  padding: 50px 20px; /* Balanced padding */
+  margin-bottom: 30px; /* Spacing below the component */
+  border-radius: 12px; /* Rounded corners for a softer look */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.slogan h2 {
+  font-size: 3.5rem; /* Increased font size */
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 255, 255, 0.5);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.slogan p {
+  font-size: 1.5rem; /* Increased font size */
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Optional: Responsive Adjustments */
+@media (max-width: 768px) {
+  .slogan h2 {
+    font-size: 2.5rem;
   }
-  
-  .slogan h3 {
-    color: white;
-    font-size: 2em;
-  }
-  
+
   .slogan p {
-    color: white;
+    font-size: 1.2rem;
   }
-  
+}

@@ -1,0 +1,410 @@
+.main-content {
+    display: flex;
+    /* Ensure that children stretch to align heights */
+    align-items: flex-start;
+}
+
+/* Slogan Banner with Gradient Text and Background Image */
+.slogan-banner {
+    width: 100%;
+    padding: 40px 20px; /* Increased padding for better spacing */
+    text-align: center;
+    background-color: #f3f4f6; /* Matching the RecentDonations background */
+    position: relative;
+    overflow: hidden; /* Hide overflow from pseudo-element */
+    z-index: 99;
+}
+
+.slogan-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/public/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    transform: scale(1.1);
+    z-index: -1;
+    opacity: 0.7; /* Adjust as needed */
+}
+
+/* Optional: Dark overlay for better text contrast */
+.slogan-banner::before {
+    background-color: rgba(0, 0, 0, 0.3);
+    mix-blend-mode: darken;
+}
+
+.slogan-banner h2 {
+    margin: 0;
+    font-size: 2.5em; /* Consistent with RecentDonations h1 */
+    color: #007bff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #007bff, #00c6ff); /* Deep Blue to Light Blue */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    position: relative; /* Ensure it's above the pseudo-element */
+    z-index: 1;
+}
+
+.slogan-banner h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 40px;
+    height: 3px;
+    background: #007bff;
+    transform: translateX(-50%);
+    border-radius: 4px;
+}
+
+/* Floating Search Bar with Background Image and Blur */
+.floating-search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f3f4f6; /* Matching the slogan-banner background */
+    position: relative;
+    overflow: hidden; /* Hide overflow from pseudo-element */
+    z-index: 100;
+}
+
+.floating-search-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    transform: scale(1.1);
+    z-index: -1;
+    opacity: 0.7; /* Adjust as needed */
+}
+
+/* Optional: Dark overlay for better contrast */
+.floating-search-bar::before {
+    background-color: rgba(0, 0, 0, 0.3);
+    mix-blend-mode: darken;
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    z-index: 1; /* Ensure it's above the pseudo-element */
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 60px 15px 20px; /* Increased right padding for the button */
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 30px; /* Changed to match adopt-button border-radius */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    line-height: 1.5; /* Improved readability */
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Updated Search Button Styling */
+.search-button {
+    position: absolute;
+    right: 15px; /* Adjusted to align within the padding */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1; /* Ensure it's above the pseudo-element */
+}
+
+.search-button:focus {
+    outline: none;
+}
+
+.search-icon {
+    width: 24px; /* Increased size for better visibility */
+    height: 24px;
+}
+
+/* Filter Panel Styling */
+.filter-panel {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    margin-right: 20px;
+    border-radius: 5px;
+    position: sticky;
+    top: 120px; /* Adjust based on header height */
+    height: fit-content;
+}
+
+.filter-panel h3 {
+    margin-top: 0;
+}
+
+/* Applied Filters Styling */
+.applied-filters {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Filter Tag Styling */
+.filter-tag {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 14px;
+}
+
+.filter-tag:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.filter-tag .remove {
+    margin-left: 8px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #007bff;
+    border-radius: 50%;
+    padding: 0 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    font-size: 12px;
+}
+
+.filter-tag .remove:hover {
+    background-color: #e0e0e0;
+}
+
+/* Filters Styling */
+.filters label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.filters select,
+.filters input[type='text'] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+    font-size: 14px;
+}
+
+.filters select:focus,
+.filters input[type='text']:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.pet-types label,
+.colors label,
+.sizes label {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: color 0.3s;
+    font-size: 14px;
+}
+
+.pet-types label:hover,
+.colors label:hover,
+.sizes label:hover {
+    color: #007bff;
+}
+
+/* Search Results Grid */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    flex: 1;
+}
+
+/* Animal Card Styling */
+.animal-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+}
+
+.animal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.animal-image-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Aspect ratio 1:1 for square images */
+    overflow: hidden;
+}
+
+.animal-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0; /* Ensure images are square */
+}
+
+.animal-info {
+    padding: 20px; /* Increased padding for better spacing */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.animal-info h4 {
+    margin: 10px 0 10px;
+    font-size: 22px;
+    color: #333;
+}
+
+.animal-info p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 16px;
+    text-align: left;
+    line-height: 1.5; /* Improved readability */
+}
+
+.adopt-button {
+    margin-top: auto; /* Push the button to the bottom */
+    background-color: #28a745;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.adopt-button:hover {
+    background-color: #218838;
+    transform: scale(1.02);
+}
+
+/* CTA Button Styling */
+.cta-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Navbar Styling Adjustments */
+.navbar {
+    position: relative;
+    z-index: 10;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .floating-search-bar {
+        flex-direction: column;
+        align-items: stretch;
+        /* Adjusted margin-top if needed */
+    }
+
+    .search-input-wrapper {
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .slogan-banner h2 {
+        font-size: 2em; /* Adjust font size for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-panel {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        position: static;
+    }
+
+    .results-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .floating-search-bar {
+        /* Adjusted margin-top if needed */
+    }
+
+    .slogan-banner h2 {
+        font-size: 1.8em; /* Further adjust for mobile devices */
+    }
+
+    /* Optional: Adjust search input and button for smaller screens */
+    .search-input-wrapper {
+        width: 100%;
+    }
+
+    .search-button {
+        right: 10px;
+    }
+}
+
+/* ======================== */
+/* ===== New Classes ====== */
+/* ======================== */
+
+/* Remove redundant pet-card and animal-card duplication */
+/* Since we're using animal-card, remove pet-card styles */
+
+/* Ensure consistency in adopt-button if reused elsewhere */
+/* No changes needed as adopt-button is already styled uniformly */

@@ -20,12 +20,6 @@ function Navbar() {
         Search
       </NavLink>
       <NavLink
-        to="/info"
-        className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-      >
-        Info
-      </NavLink>
-      <NavLink
         to="/donate"
         className={({ isActive }) => (isActive ? 'active' : 'inactive')}
       >

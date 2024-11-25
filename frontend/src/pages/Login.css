@@ -1,0 +1,173 @@
+/* General Page Styling */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.login-page {
+  color: #000;
+  text-align: center;
+  height: 100%;
+}
+
+/* Header Styling */
+.header {
+  background-color: #39C5BB;
+  padding: 10px;
+}
+
+.logo {
+  color: #fff;
+  margin: 0;
+  text-decoration: none;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+/* Background Image Styling */
+.background-image {
+  background-image: url('/public/images/puppies-background.png');
+  background-size: cover;
+  background-position: center;
+  height: calc(100vh - 50px); /* 50px accounts for the header height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Login Box Styling */
+.login-box {
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 30px;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-box h2 {
+  margin-top: 0;
+  font-size: 1.8em;
+  margin-bottom: 10px; /* Reduced margin to fix spacing */
+}
+
+/* Form Styling */
+.login-box form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-box input {
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-box input:focus {
+  border-color: #39C5BB;
+  outline: none;
+}
+
+.login-box button[type='submit'] {
+  background-color: #39C5BB;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.login-box button[type='submit']:hover {
+  background-color: #33b3aa;
+}
+
+/* Success Message Styling */
+.success-message {
+  background-color: #e6f4ea; /* Light green background */
+  color: #2e7d32; /* Dark green text */
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #b7dfb8; /* Light green border */
+}
+
+/* Error Message Styling */
+.error-message {
+  background-color: #fdecea; /* Light red background */
+  color: #d32f2f; /* Dark red text */
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #f5c6cb; /* Light red border */
+}
+
+/* Signup Button Styling */
+.signup-button {
+  display: block;
+  margin: 20px 0 10px;
+  color: #fff;
+  background-color: #39C5BB;
+  padding: 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.signup-button:hover {
+  background-color: #33b3aa;
+}
+
+/* Google Sign-In Button Styling */
+.google-signin {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.google-signin img {
+  width: 200px;
+  height: auto;
+}
+
+/* Forgot Password Link Styling */
+.forgot-password {
+  display: block;
+  margin: 20px 0 0;
+  color: #39C5BB;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .login-box {
+    width: 90%; /* Adapt to smaller screen sizes */
+    padding: 20px;
+  }
+
+  .google-signin img {
+    width: 180px; /* Adjust size for mobile */
+  }
+
+  .signup-button, .forgot-password {
+    font-size: 14px; /* Reduce text size */
+  }
+}

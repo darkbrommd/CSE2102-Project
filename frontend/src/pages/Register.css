@@ -1,0 +1,165 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+.register-page {
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #000;
+  text-align: center;
+  height: 100%;
+}
+
+.header {
+  background-color: #39C5BB;
+  padding: 10px;
+}
+
+.logo {
+  color: #fff;
+  margin: 0;
+  text-decoration: none;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.background-image {
+  background-image: url('/public/images/puppies-background.png');
+  background-size: cover;
+  background-position: center;
+  height: calc(100vh - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-box {
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.register-box h2 {
+  margin-top: 0;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-placeholder {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: #fff;
+}
+
+.upload-button {
+  background-color: #39C5BB;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.upload-button:hover {
+  background-color: #33b3aa;
+}
+
+.register-box form {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-box input {
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.register-box input:focus {
+  border-color: #39C5BB;
+  outline: none;
+}
+
+.register-box button[type='submit'] {
+  background-color: #39C5BB;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+.register-box button[type='submit']:hover {
+  background-color: #33b3aa;
+}
+
+.login-link {
+  display: block;
+  margin: 20px 0 10px;
+  color: #39C5BB;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.google-signin {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.google-signin img {
+  width: 200px;
+  height: auto;
+}
+
+.success-message {
+  color: #2e7d32; /* Dark green text */
+  background-color: #e6f4ea; /* Light green background */
+  border: 1px solid #b7dfb8;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #D8000C; /* Bright red color for visibility */
+  background-color: #FFBABA; /* Light red background */
+  border: 1px solid #D8000C;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 14px;
+}

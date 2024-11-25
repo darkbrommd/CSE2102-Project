@@ -19,6 +19,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(200), nullable=False)
     zip_code = db.Column(db.String(20), nullable=True)
     profile_picture = db.Column(db.String(200), nullable=True)
+    favorites = db.Column(db.JSON, default=[])
 
     def set_password(self, password):
         """Hashes the password and stores it."""
@@ -35,7 +36,8 @@ class User(db.Model):
             "username": self.username,
             "email": self.email,
             "zip_code": self.zip_code,
-            "profile_picture": self.profile_picture
+            "profile_picture": self.profile_picture,
+            "favorites": self.favorites 
         }
 
 class Pet(db.Model):
@@ -55,6 +57,7 @@ class Pet(db.Model):
     available_for_adoption = db.Column(db.Boolean, default=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     photo = db.Column(db.String(200), nullable=True)
+    about = db.Column(db.Text, nullable=True)
 
     def to_dict(self):
         """Converts the Pet object to a dictionary."""
@@ -70,7 +73,8 @@ class Pet(db.Model):
             "special_needs": self.special_needs,
             "available_for_adoption": self.available_for_adoption,
             "date_added": self.date_added,
-            "photo": self.photo
+            "photo": self.photo,
+            "about": self.about
         }
 
 class Donation(db.Model):
@@ -125,6 +129,7 @@ class Donation(db.Model):
         "anonymous": self.anonymous
     }
 
+
 class Adoption(db.Model):
     """Represents an adoption record linking a user and a pet."""
 
@@ -134,14 +139,30 @@ class Adoption(db.Model):
     pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date_adopted = db.Column(db.DateTime, default=datetime.utcnow)
+    adopter_name = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    address2 = db.Column(db.String(255))
+    zip_code = db.Column(db.String(10), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
+    additional_comments = db.Column(db.Text)
+    duration = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
-        """Convertss the Adoption object to a dictionary."""
+        """Converts the Adoption object to a dictionary."""
         return {
             "id": self.id,
             "pet_id": self.pet_id,
             "user_id": self.user_id,
-            "date_adopted": self.date_adopted
+            "date_adopted": self.date_adopted.isoformat(),
+            "adopter_name": self.adopter_name,
+            "address": self.address,
+            "address2": self.address2,
+            "zip_code": self.zip_code,
+            "email": self.email,
+            "phone_number": self.phone_number,
+            "additional_comments": self.additional_comments,
+            "duration": self.duration,  
         }
 
 class Meeting(db.Model):

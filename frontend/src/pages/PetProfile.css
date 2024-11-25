@@ -1,0 +1,166 @@
+.pet-profile-page {
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Remove the padding-top or adjust it if necessary */
+  padding-top: 0;  /* Set to 0 or adjust as needed */
+}
+
+/* Page Title */
+.page-title {
+  background-image: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+  color: #ffffff;
+  padding: 30px;
+  text-align: center;
+}
+
+.page-title h1 {
+  margin: 0;
+  font-size: 3em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Pet Information Section */
+.pet-info-section {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pet-image-container {
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+}
+
+.pet-image {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 8px solid #ffffff;
+  object-fit: cover;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.pet-name h2 {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 2em;
+  text-transform: uppercase;
+}
+
+.pet-details {
+  flex: 1;
+  min-width: 300px;
+  padding: 50px 40px;
+  color: #333;
+  background-color: #f9fafb;
+}
+
+.pet-details p strong {
+  color: #007bff;
+}
+
+/* Bottom Section */
+.pet-additional-info {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.additional-info {
+  flex: 2;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.additional-info h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 70px;
+  height: 4px;
+  background: #007bff;
+}
+
+.action-buttons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.start-application-button,
+.add-to-favorites,
+.remove-from-favorites {
+  width: 100%;
+  padding: 20px 40px;
+  font-size: 1.5em;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+/* Start Application Button */
+.start-application-button {
+  background-color: #28a745;
+  color: #ffffff;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.start-application-button:hover {
+  background-color: #218838;
+}
+
+/* Add to Favorites Button */
+.add-to-favorites {
+  background-color: #ffc107;
+  color: #000;
+  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+}
+
+.add-to-favorites:hover {
+  background-color: #e0a800;
+}
+
+/* Remove from Favorites Button */
+.remove-from-favorites {
+  background-color: #dc3545;
+  color: #ffffff;
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+}
+
+.remove-from-favorites:hover {
+  background-color: #c82333;
+}
+
+/* Favorite Messages */
+.favorite-message {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: green;
+}
+
+.favorite-error {
+  color: red;
+}

@@ -53,7 +53,8 @@ def initialize_data():
             gender="Male",
             special_needs=False,
             available_for_adoption=True,
-            photo="public/pet_photos/buddy.jpg"
+            photo="images/pets/buddy.png",
+            about="Buddy is a friendly and affectionate Golden Retriever who loves long walks and playing fetch. His outgoing personality makes him a great companion for families or individuals. Buddy gets along well with other pets and is eager to learn new tricks."
         )
 
         pet2 = Pet(
@@ -65,12 +66,58 @@ def initialize_data():
             location="Los Angeles",
             gender="Female",
             special_needs=True,
-            available_for_adoption=False,
-            photo="public/pet_photos/whiskers.jpg"
+            available_for_adoption=True,
+            photo="images/pets/whiskers.png",
+            about="Whiskers is a calm and gentle Siamese cat with beautiful blue eyes. She requires special attention due to a mild dietary restriction but is otherwise a healthy and playful cat. Whiskers enjoys cozy corners, sunny windowsills, and gentle petting."
+        )
+
+        pet3 = Pet(
+            name="Pumpkin",
+            species="Cat",
+            breed="Siamese",
+            age=2,
+            size="Small",
+            location="Los Angeles",
+            gender="Female",
+            special_needs=True,
+            available_for_adoption=True,
+            photo="images/pets/pumpkin.png",
+            about="Pumpkin is a curious and lively Siamese cat who loves exploring her surroundings. She's a perfect choice for someone looking for a playful and intelligent feline friend. Pumpkin is great with kids and can adapt to both quiet and bustling households."
+        )
+
+        pet4 = Pet(
+            name="Max",
+            species="Dog",
+            breed="Border Collie",
+            age=4,
+            size="Medium",
+            location="Austin",
+            gender="Male",
+            special_needs=False,
+            available_for_adoption=True,
+            photo="images/pets/max.png",
+            about="Max is an energetic and highly intelligent Border Collie who thrives on mental and physical stimulation. He loves agility courses and outdoor adventures. Max is loyal and protective, making him an excellent addition to an active family."
+        )
+
+        pet5 = Pet(
+            name="Charlie",
+            species="Dog",
+            breed="Havanese",
+            age=5,
+            size="Small",
+            location="Istanbul",
+            gender="Male",
+            special_needs=False,
+            available_for_adoption=True,
+            photo="images/pets/charlie.png",
+            about="Charlie is a lovable Havanese with a calm and gentle demeanor. He enjoys being close to his human companions and is content lounging on the couch or going for short walks. Charlie is well-suited for quieter homes and makes an excellent lap dog."
         )
 
         db.session.add(pet1)
         db.session.add(pet2)
+        db.session.add(pet3)
+        db.session.add(pet4)
+        db.session.add(pet5)
         db.session.commit()  # Commit to assign IDs
         print("Pets added.")
 
@@ -119,10 +166,36 @@ def initialize_data():
         db.session.commit()
         print("Donations added.")
 
-        # Create adoptions with pet and user references (using assigned IDs)
-        print("Adding adoptions...")
-        adoption1 = Adoption(pet_id=pet1.id, user_id=user1.id, date_adopted=datetime.utcnow())
-        adoption2 = Adoption(pet_id=pet2.id, user_id=user2.id, date_adopted=datetime.utcnow())
+        # Create adoption records with fixed IDs
+        adoption1 = Adoption(
+            pet_id=1,
+            user_id=1,
+            date_adopted=datetime.utcnow(),
+            adopter_name="John Doe",
+            address="123 Main Street",
+            address2="Apt 4B",
+            zip_code="12345",
+            email="john.doe@example.com",
+            phone_number="555-1234",
+            additional_comments="Excited to bring Buddy home!",
+            duration=30  # Set a duration for this adoption
+        )
+
+        adoption2 = Adoption(
+            pet_id=2,
+            user_id=2,
+            date_adopted=datetime.utcnow(),
+            adopter_name="Jane Doe",
+            address="456 Elm Street",
+            address2="",
+            zip_code="67890",
+            email="jane.doe@example.com",
+            phone_number="555-5678",
+            additional_comments="Lucy will be a great companion!",
+            duration=30  # Set a duration for this adoption
+        )
+
+        # Add to the database session and commit
         db.session.add(adoption1)
         db.session.add(adoption2)
 
