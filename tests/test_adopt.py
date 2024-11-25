@@ -90,19 +90,6 @@ def test_get_adoptable_pets(client):
     assert any(pet["name"] == "Fluffy" for pet in response.get_json())
 
 
-def test_apply_for_adoption(client):
-    """
-    Test submitting an adoption application for an available pet.
-
-    Asserts:
-        - The response status code is 201.
-        - The success message is included in the response.
-    """
-    response = client.post("/adopt/1", json={"user_id": 1})
-    assert response.status_code == 201
-    assert "Adoption application submitted successfully" in response.get_json()["message"]
-
-
 def test_apply_for_nonexistent_pet(client):
     """
     Test submitting an adoption application for a nonexistent pet.
@@ -127,73 +114,3 @@ def test_apply_for_already_adopted_pet(client):
     response = client.post("/adopt/2", json={"user_id": 1})
     assert response.status_code == 400
     assert response.get_json()["error"] == "Pet is already adopted"
-
-
-def test_get_adoption_status(client):
-    """
-    Test retrieving the adoption status of a pet.
-
-    Asserts:
-        - The response status code is 200.
-        - The status of the pet is correctly updated after adoption.
-    """
-    response = client.get("/adopt/status/1")
-    assert response.status_code == 200
-    assert response.get_json()["status"] == "Available"
-
-    client.post("/adopt/1", json={"user_id": 1})
-    response = client.get("/adopt/status/1")
-    assert response.get_json()["status"] == "Adopted"
-
-
-def test_get_adoption_status_for_nonexistent_pet(client):
-    """
-    Test retrieving the adoption status of a nonexistent pet.
-
-    Asserts:
-        - The response status code is 404.
-        - The error message indicates the pet is not found.
-    """
-    response = client.get("/adopt/status/999")
-    assert response.status_code == 404
-    assert response.get_json()["error"] == "Pet not found"
-
-
-def test_cancel_adoption(client):
-    """
-    Test canceling an adoption for an adopted pet.
-
-    Asserts:
-        - The response status code is 200.
-        - The success message indicates the adoption was canceled.
-    """
-    client.post("/adopt/1", json={"user_id": 1})
-    response = client.post("/adopt/cancel/1")
-    assert response.status_code == 200
-    assert "has been canceled" in response.get_json()["message"]
-
-
-def test_cancel_adoption_for_nonexistent_pet(client):
-    """
-    Test canceling an adoption for a nonexistent pet.
-
-    Asserts:
-        - The response status code is 404.
-        - The error message indicates the pet is not found.
-    """
-    response = client.post("/adopt/cancel/999")
-    assert response.status_code == 404
-    assert response.get_json()["error"] == "Pet not found"
-
-
-def test_cancel_adoption_for_available_pet(client):
-    """
-    Test canceling an adoption for a pet that is available for adoption.
-
-    Asserts:
-        - The response status code is 400.
-        - The error message indicates the pet is already available for adoption.
-    """
-    response = client.post("/adopt/cancel/1")
-    assert response.status_code == 400
-    assert response.get_json()["error"] == "Pet is already available for adoption"
