@@ -181,6 +181,7 @@ Below is a partial directory structure to help you navigate the project:
 ## Archived Status & Disclaimer
 This codebase is provided as-is and is not maintained. It serves as a historical reference for the Husky Adoption project. Feel free to fork it and experiment, but do not expect updates or support.
 
+A special thanks to my amazing team members—Alper Tepebas, Dylan Wojteczko, and Shrivishnu Venkatesan—for their hard work, collaboration, and dedication throughout this project. Your contributions made this project possible!
 ---
 
 # Below is the Original Readme.md. 
