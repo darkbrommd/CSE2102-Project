@@ -184,20 +184,6 @@ This codebase is provided as-is and is not maintained. It serves as a historical
 A special thanks to my amazing team members—Alper Tepebas, Dylan Wojteczko, and Shrivishnu Venkatesan—for their hard work, collaboration, and dedication throughout this project. Your contributions made this project possible!
 ---
 
-# Below is the Original Readme.md. 
-
----
-
-# cse2102-fall24-team36
-
-
-## Group Members
-
-**Supeng Yu**       - suy20005  
-**Alper Tepebas**   - alt21028  
-**Dylan Wojteczko** - dcw18002  
-**Shrivishnu Venkatesan** - shv20006
-
 ## Trello Board
 https://trello.com/b/pvWsZoYV/group-6-scrum-board
 
